@@ -35,20 +35,20 @@ class Playbot:
         Args:
             browser (str, optional): Which browser should playwright start. Defaults to "chromium".
         """
-        self.selected_browser = browser
-        self.browser = Union[None, Browser]
-        self.context = Union[None, BrowserContext]
-        self.page = Union[None, Page]
+        self._selected_browser: str = browser
+        self._browser: Union[None, Browser] = None
+        self._context: Union[None, BrowserContext] = None
+        self._page: Union[None, Page] = None
 
     def _start_browser(self, browser: str, **kwargs):
         if browser == "chromium":
-            self.browser = sync_playwright().start().chromium.launch(**kwargs)
+            self._browser = sync_playwright().start().chromium.launch(**kwargs)
 
         elif browser == "firefox":
-            self.browser = sync_playwright().start().firefox.launch(**kwargs)
+            self._browser = sync_playwright().start().firefox.launch(**kwargs)
 
         elif browser == "webkit":
-            self.browser = sync_playwright().start().webkit.launch(**kwargs)
+            self._browser = sync_playwright().start().webkit.launch(**kwargs)
 
         else:
             raise RuntimeError(
@@ -56,18 +56,18 @@ class Playbot:
             )
 
     def _close_browser(self):
-        self.browser.close()
+        self._browser.close()
 
     def _start_context(self, **kwargs):
-        self.context = self.browser.new_context(**kwargs)
-        return self.context
+        self._context = self._browser.new_context(**kwargs)
+        return self._context
 
     def _start_page(self, **kwargs):
-        self.page = self.context.new_page(**kwargs)
-        return self.page
+        self._page = self._context.new_page(**kwargs)
+        return self._page
 
     def _goto(self, url, **kwargs):
-        return self.page.goto(url, **kwargs)
+        return self._page.goto(url, **kwargs)
 
     # public
 
@@ -76,7 +76,7 @@ class Playbot:
         """Starts the browser. Type of the browser is provided
         when importing the library.
         """
-        self._start_browser(self.selected_browser, **kwargs)
+        self._start_browser(self._selected_browser, **kwargs)
 
     @keyword
     def new_context(self, **kwargs) -> BrowserContext:
@@ -97,7 +97,7 @@ class Playbot:
         return self._start_page(**kwargs)
 
     @keyword
-    def close(self):
+    def close_browser(self):
         """Closes all the pages, contexts of the browser and
         the browser itself.
         """

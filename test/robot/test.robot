@@ -12,4 +12,4 @@ Start browser, context and page and close
     New Context
     New Page
     Go To    https://www.tesena.com/en
-    Close
+    Close Browser
