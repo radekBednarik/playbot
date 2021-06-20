@@ -1,10 +1,16 @@
 """Playbot provides very basic operations/keywords
 by playwright/python library to the robotframework.
 """
-from typing import Optional, Union
 
-from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright, Response
+from typing import Union
+
+from playwright.sync_api import Browser
 from robot.api.deco import keyword, library
+
+
+from playbot.src.browser import PlaybotBrowser
+from playbot.src.context import PlaybotContext
+from playbot.src.page import PlaybotPage
 
 
 @library
@@ -30,87 +36,25 @@ class Playbot:
     ROBOT_LIBRARY_SCOPE = "SUITE"
 
     def __init__(self, browser: str = "chromium"):
-        """Instantiates the class.
-
-        Args:
-            browser (str, optional): Which browser should playwright start. Defaults to "chromium".
-        """
         self._selected_browser: str = browser
-        self._browser: Union[None, Browser] = None
-        self._context: Union[None, BrowserContext] = None
-        self._page: Union[None, Page] = None
-
-    def _start_browser(self, browser: str, **kwargs):
-        if browser == "chromium":
-            self._browser = sync_playwright().start().chromium.launch(**kwargs)
-
-        elif browser == "firefox":
-            self._browser = sync_playwright().start().firefox.launch(**kwargs)
-
-        elif browser == "webkit":
-            self._browser = sync_playwright().start().webkit.launch(**kwargs)
-
-        else:
-            raise RuntimeError(
-                "You have to select either 'chromium', 'firefox', or 'webkit' as browser."
-            )
-
-    def _close_browser(self):
-        self._browser.close()
-
-    def _start_context(self, **kwargs):
-        self._context = self._browser.new_context(**kwargs)
-        return self._context
-
-    def _start_page(self, **kwargs):
-        self._page = self._context.new_page(**kwargs)
-        return self._page
-
-    def _goto(self, url, **kwargs):
-        return self._page.goto(url, **kwargs)
-
-    # public
+        self._playbot_browser: Union[None, Browser] = None
 
     @keyword
     def start_browser(self, **kwargs):
-        """Starts the browser. Type of the browser is provided
-        when importing the library.
-        """
-        self._start_browser(self._selected_browser, **kwargs)
+        self._playbot_browser = PlaybotBrowser(self._selected_browser, **kwargs)
 
     @keyword
-    def new_context(self, **kwargs) -> BrowserContext:
-        """Starts new context of the browser.
-
-        Returns:
-            BrowserContext (object): Instance of the browser context.
-        """
-        return self._start_context(**kwargs)
+    def new_context(self, **kwargs):
+        return PlaybotContext(self._playbot_browser.browser, **kwargs)
 
     @keyword
-    def new_page(self, **kwargs) -> Page:
-        """Starts new page of the context.
+    def new_page(self, context: PlaybotContext, **kwargs):
+        return PlaybotPage(context.context, **kwargs)
 
-        Returns:
-            Page (object): Instance of the browser context page.
-        """
-        return self._start_page(**kwargs)
+    @keyword
+    def go_to(self, browser_page: PlaybotPage, url: str, **kwargs):
+        return browser_page.go_to(browser_page.page, url, **kwargs)
 
     @keyword
     def close_browser(self):
-        """Closes all the pages, contexts of the browser and
-        the browser itself.
-        """
-        self._close_browser()
-
-    @keyword
-    def go_to(self, url: str, **kwargs) -> Optional[Response]:
-        """Navigates to given url. Returns the response.
-
-        Args:
-            url (str): url to navigate to
-
-        Returns:
-            Optional[Response]: Response object of the last redirect of the navigation
-        """
-        return self._goto(url, **kwargs)
+        self._playbot_browser.close_browser(self._playbot_browser.browser)
