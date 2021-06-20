@@ -1,9 +1,9 @@
 """Playbot provides very basic operations/keywords
 by playwright/python library to the robotframework.
 """
-from typing import Union
+from typing import Optional, Union
 
-from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright
+from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright, Response
 from robot.api.deco import keyword, library
 
 
@@ -66,6 +66,9 @@ class Playbot:
         self.page = self.context.new_page(**kwargs)
         return self.page
 
+    def _goto(self, url, **kwargs):
+        return self.page.goto(url, **kwargs)
+
     # public
 
     @keyword
@@ -76,14 +79,22 @@ class Playbot:
         self._start_browser(self.selected_browser, **kwargs)
 
     @keyword
-    def new_context(self, **kwargs):
-        """Starts new context of the browser."""
-        self._start_context(**kwargs)
+    def new_context(self, **kwargs) -> BrowserContext:
+        """Starts new context of the browser.
+
+        Returns:
+            BrowserContext (object): Instance of the browser context.
+        """
+        return self._start_context(**kwargs)
 
     @keyword
-    def new_page(self, **kwargs):
-        """Starts new page of the context."""
-        self._start_page(**kwargs)
+    def new_page(self, **kwargs) -> Page:
+        """Starts new page of the context.
+
+        Returns:
+            Page (object): Instance of the browser context page.
+        """
+        return self._start_page(**kwargs)
 
     @keyword
     def close(self):
@@ -91,3 +102,15 @@ class Playbot:
         the browser itself.
         """
         self._close_browser()
+
+    @keyword
+    def go_to(self, url: str, **kwargs) -> Optional[Response]:
+        """Navigates to given url. Returns the response.
+
+        Args:
+            url (str): url to navigate to
+
+        Returns:
+            Optional[Response]: Response object of the last redirect of the navigation
+        """
+        return self._goto(url, **kwargs)

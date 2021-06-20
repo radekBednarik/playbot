@@ -1,5 +1,5 @@
 ***Settings***
-Library    ${EXECDIR}${/}playbot/Playbot.py    browser=webkit
+Library    ${EXECDIR}${/}playbot/Playbot.py    browser=chromium
 
 ***Variables***
 ${TRUE}     Convert to boolean=True
@@ -11,4 +11,5 @@ Start browser, context and page and close
     Start Browser    headless=${FALSE}
     New Context
     New Page
+    Go To    https://www.tesena.com/en
     Close
