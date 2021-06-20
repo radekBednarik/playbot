@@ -1,10 +1,13 @@
 """Playbot provides very basic operations/keywords
 by playwright/python library to the robotframework.
 """
-from typing import Optional, Union
 
-from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright, Response
+from typing import Union
+
+from playwright.sync_api import Browser, BrowserContext, sync_playwright
 from robot.api.deco import keyword, library
+
+from playbot.src.context import PlaybotContext
 
 
 @library
@@ -37,8 +40,6 @@ class Playbot:
         """
         self._selected_browser: str = browser
         self._browser: Union[None, Browser] = None
-        self._context: Union[None, BrowserContext] = None
-        self._page: Union[None, Page] = None
 
     def _start_browser(self, browser: str, **kwargs):
         if browser == "chromium":
@@ -59,15 +60,7 @@ class Playbot:
         self._browser.close()
 
     def _start_context(self, **kwargs):
-        self._context = self._browser.new_context(**kwargs)
-        return self._context
-
-    def _start_page(self, **kwargs):
-        self._page = self._context.new_page(**kwargs)
-        return self._page
-
-    def _goto(self, url, **kwargs):
-        return self._page.goto(url, **kwargs)
+        return PlaybotContext(self._browser, **kwargs)
 
     # public
 
@@ -88,29 +81,8 @@ class Playbot:
         return self._start_context(**kwargs)
 
     @keyword
-    def new_page(self, **kwargs) -> Page:
-        """Starts new page of the context.
-
-        Returns:
-            Page (object): Instance of the browser context page.
-        """
-        return self._start_page(**kwargs)
-
-    @keyword
     def close_browser(self):
         """Closes all the pages, contexts of the browser and
         the browser itself.
         """
         self._close_browser()
-
-    @keyword
-    def go_to(self, url: str, **kwargs) -> Optional[Response]:
-        """Navigates to given url. Returns the response.
-
-        Args:
-            url (str): url to navigate to
-
-        Returns:
-            Optional[Response]: Response object of the last redirect of the navigation
-        """
-        return self._goto(url, **kwargs)
