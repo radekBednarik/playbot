@@ -1,5 +1,5 @@
 ***Settings***
-Library    ${EXECDIR}${/}playbot/Playbot.py    browser=chromium
+Library    ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
 
 Suite Setup       Start Browser   headless=${FALSE}
 Suite Teardown    Close Browser
