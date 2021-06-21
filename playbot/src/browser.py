@@ -1,8 +1,9 @@
 '''Implements Playwright's Browser.
 '''
 
-from playbot.src.context import PlaybotContext
 from playwright.sync_api import Browser, sync_playwright
+
+from playbot.src.context import PlaybotContext
 
 
 class PlaybotBrowser:

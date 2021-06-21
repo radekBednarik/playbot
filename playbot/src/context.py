@@ -1,9 +1,9 @@
 '''Implements Playwright's browser's Context.
 '''
 
+from playwright.sync_api import Browser, BrowserContext
+
 from playbot.src.page import PlaybotPage
-from playwright.sync_api import Browser, BrowserContext, Page
-from robot.api.deco import keyword
 
 
 class PlaybotContext:
@@ -16,12 +16,3 @@ class PlaybotContext:
 
     def _start_page(self, context: BrowserContext, **kwargs):
         return PlaybotPage(context, **kwargs)
-
-    @keyword
-    def new_page(self, context: BrowserContext, **kwargs) -> Page:
-        """Starts new page of the context.
-
-        Returns:
-            Page (object): Instance of the browser context page.
-        """
-        return self._start_page(context, **kwargs)

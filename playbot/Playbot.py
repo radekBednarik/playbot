@@ -7,7 +7,6 @@ from typing import Union
 from playwright.sync_api import Browser
 from robot.api.deco import keyword, library
 
-
 from playbot.src.browser import PlaybotBrowser
 from playbot.src.context import PlaybotContext
 from playbot.src.page import PlaybotPage
