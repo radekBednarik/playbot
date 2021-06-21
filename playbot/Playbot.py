@@ -48,8 +48,8 @@ class Playbot:
         return PlaybotContext(self._playbot_browser.browser, **kwargs)
 
     @keyword
-    def new_page(self, context: PlaybotContext, **kwargs):
-        return PlaybotPage(context.context, **kwargs)
+    def new_page(self, playbot_context: PlaybotContext, **kwargs):
+        return PlaybotPage(playbot_context.context, **kwargs)
 
     @keyword
     def go_to(self, browser_page: PlaybotPage, url: str, **kwargs):
