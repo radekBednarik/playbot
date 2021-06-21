@@ -47,6 +47,10 @@ class Playbot:
         return PlaybotContext(self._playbot_browser.browser, **kwargs)
 
     @keyword
+    def close_context(self, context: PlaybotContext):
+        context.close_context(context.context)
+
+    @keyword
     def new_page(self, playbot_context: PlaybotContext, **kwargs):
         return PlaybotPage(playbot_context.context, **kwargs)
 
@@ -57,3 +61,7 @@ class Playbot:
     @keyword
     def close_browser(self):
         self._playbot_browser.close_browser(self._playbot_browser.browser)
+
+    @keyword
+    def wait_for_timeout(self, page: PlaybotPage, timeout: float):
+        page.wait_for_timeout(page.page, timeout)

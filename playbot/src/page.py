@@ -15,3 +15,7 @@ class PlaybotPage:
     @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
+
+    @staticmethod
+    def wait_for_timeout(page: Page, timeout: float):
+        page.wait_for_timeout(timeout)

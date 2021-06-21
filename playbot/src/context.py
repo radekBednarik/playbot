@@ -14,5 +14,10 @@ class PlaybotContext:
     def _start_context(self, **kwargs):
         return self._browser_type_instance.new_context(**kwargs)
 
-    def _start_page(self, context: BrowserContext, **kwargs):
+    @staticmethod
+    def _start_page(context: BrowserContext, **kwargs):
         return PlaybotPage(context, **kwargs)
+
+    @staticmethod
+    def close_context(context: BrowserContext):
+        context.close()
