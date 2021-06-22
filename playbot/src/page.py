@@ -2,6 +2,7 @@
 '''
 
 from playwright.sync_api import BrowserContext, Page
+from playbot.src.element_handle import PlaybotElementHandle
 
 
 class PlaybotPage:
@@ -15,6 +16,10 @@ class PlaybotPage:
     @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
+
+    @staticmethod
+    def query_selector(page: Page, selector: str):
+        return PlaybotElementHandle(page, selector)
 
     @staticmethod
     def wait_for_timeout(page: Page, timeout: float):

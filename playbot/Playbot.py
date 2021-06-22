@@ -10,6 +10,7 @@ from robot.api.deco import keyword, library
 from playbot.src.browser import PlaybotBrowser
 from playbot.src.context import PlaybotContext
 from playbot.src.page import PlaybotPage
+from playbot.src.page import PlaybotElementHandle
 
 
 @library
@@ -65,3 +66,11 @@ class Playbot:
     @keyword
     def wait_for_timeout(self, page: PlaybotPage, timeout: float):
         page.wait_for_timeout(page.page, timeout)
+
+    @keyword
+    def query_selector(self, page: PlaybotPage, selector: str):
+        return page.query_selector(page.page, selector)
+
+    @keyword
+    def is_visible(self, element_handle: PlaybotElementHandle):
+        return element_handle.is_visible(element_handle.element_handle)
