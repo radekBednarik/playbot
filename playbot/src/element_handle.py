@@ -1,7 +1,7 @@
 '''Implements Playwright's Element Handle.
 '''
 
-from playwright.sync_api import ElementHandle,Page
+from playwright.sync_api import ElementHandle, Page
 
 
 class PlaybotElementHandle:
