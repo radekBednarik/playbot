@@ -44,6 +44,10 @@ class Playbot:
         self._playbot_browser = PlaybotBrowser(self._selected_browser, **kwargs)
 
     @keyword
+    def close_browser(self):
+        self._playbot_browser.close_browser(self._playbot_browser.browser)
+
+    @keyword
     def new_context(self, **kwargs):
         return PlaybotContext(self._playbot_browser.browser, **kwargs)
 
@@ -60,17 +64,22 @@ class Playbot:
         return browser_page.go_to(browser_page.page, url, **kwargs)
 
     @keyword
-    def close_browser(self):
-        self._playbot_browser.close_browser(self._playbot_browser.browser)
-
-    @keyword
     def wait_for_timeout(self, page: PlaybotPage, timeout: float):
         page.wait_for_timeout(page.page, timeout)
 
     @keyword
-    def query_selector(self, page: PlaybotPage, selector: str):
-        return page.query_selector(page.page, selector)
+    def query_selector(
+        self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
+    ):
+        if isinstance(handle, PlaybotPage):
+            return handle.query_selector(handle.page, selector)
+        if isinstance(handle, PlaybotElementHandle):
+            return PlaybotElementHandle(handle.element_handle, selector)
 
     @keyword
     def is_visible(self, element_handle: PlaybotElementHandle):
+        return element_handle.is_visible(element_handle.element_handle)
+
+    @keyword
+    def is_hidden(self, element_handle: PlaybotElementHandle):
         return element_handle.is_visible(element_handle.element_handle)
