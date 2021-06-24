@@ -72,7 +72,7 @@ class Playbot:
         self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
     ):
         if isinstance(handle, PlaybotPage):
-            return handle.query_selector(handle.page, selector)
+            return PlaybotElementHandle(handle.page, selector)
         if isinstance(handle, PlaybotElementHandle):
             return PlaybotElementHandle(handle.element_handle, selector)
 

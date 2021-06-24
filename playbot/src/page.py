@@ -18,9 +18,5 @@ class PlaybotPage:
         return page.goto(url, **kwargs)
 
     @staticmethod
-    def query_selector(page: Page, selector: str):
-        return PlaybotElementHandle(page, selector)
-
-    @staticmethod
     def wait_for_timeout(page: Page, timeout: float):
         page.wait_for_timeout(timeout)
