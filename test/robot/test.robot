@@ -28,9 +28,9 @@ Go to YouTube, iHned
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.youtube.com
     Wait For Timeout          ${page}                3000
-    ${context_two_page_two}=  New Page               ${context}
-    Go To                     ${page}                https://ihned.cz
-    Wait For Timeout          ${page}                3000
+    ${page_two}=              New Page               ${context}
+    Go To                     ${page_two}            https://ihned.cz
+    Wait For Timeout          ${page_two}            3000
     Close Context             ${context}
 
 Go to Tesena, Query selector Via element
@@ -41,4 +41,5 @@ Go to Tesena, Query selector Via element
     ${banner}=                Query Selector         ${page}      xpath=//div[@id="panel-cookies"]
     ${accept_bttn}=           Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
     ${test_result}=           Is Visible             ${accept_bttn}
-    Should Be True            ${test_result}==True
+    Should Be True            ${test_result}==
+    Close Context             ${context}

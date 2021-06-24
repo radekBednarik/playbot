@@ -10,7 +10,7 @@ from robot.api.deco import keyword, library
 from playbot.src.browser import PlaybotBrowser
 from playbot.src.context import PlaybotContext
 from playbot.src.page import PlaybotPage
-from playbot.src.page import PlaybotElementHandle
+from playbot.src.element_handle import PlaybotElementHandle
 
 
 @library
