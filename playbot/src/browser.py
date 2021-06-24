@@ -3,8 +3,6 @@
 
 from playwright.sync_api import Browser, sync_playwright
 
-from playbot.src.context import PlaybotContext
-
 
 class PlaybotBrowser:
     def __init__(self, browser: str = "chromium", **kwargs):
@@ -24,10 +22,6 @@ class PlaybotBrowser:
             raise RuntimeError(
                 "You have to select either 'chromium', 'firefox', or 'webkit' as browser."
             )
-
-    @staticmethod
-    def _start_context(browser: Browser, **kwargs):
-        return PlaybotContext(browser, **kwargs)
 
     @staticmethod
     def close_browser(browser: Browser):

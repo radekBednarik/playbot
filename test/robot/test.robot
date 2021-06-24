@@ -41,5 +41,5 @@ Go to Tesena, Query selector Via element
     ${banner}=                Query Selector         ${page}      xpath=//div[@id="panel-cookies"]
     ${accept_bttn}=           Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
     ${test_result}=           Is Visible             ${accept_bttn}
-    Should Be True            ${test_result}==
+    Should Be True            ${test_result}==True
     Close Context             ${context}
