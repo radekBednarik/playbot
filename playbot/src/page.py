@@ -2,7 +2,6 @@
 '''
 
 from playwright.sync_api import BrowserContext, Page
-from playbot.src.element_handle import PlaybotElementHandle
 
 
 class PlaybotPage:
