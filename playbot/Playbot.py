@@ -82,4 +82,4 @@ class Playbot:
 
     @keyword
     def is_hidden(self, element_handle: PlaybotElementHandle):
-        return element_handle.is_visible(element_handle.element_handle)
+        return element_handle.is_hidden(element_handle.element_handle)
