@@ -56,6 +56,12 @@ class Playbot:
         context.close_context(context.context)
 
     @keyword
+    def cookies(
+        self, context: PlaybotContext, urls: Union[str, list[str], None] = None
+    ):
+        return context.cookies(context.context, urls)
+
+    @keyword
     def new_page(self, playbot_context: PlaybotContext, **kwargs):
         return PlaybotPage(playbot_context.context, **kwargs)
 

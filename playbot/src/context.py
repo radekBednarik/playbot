@@ -1,6 +1,8 @@
 '''Implements Playwright's browser's Context.
 '''
 
+from typing import Union
+
 from playwright.sync_api import Browser, BrowserContext
 
 
@@ -15,3 +17,7 @@ class PlaybotContext:
     @staticmethod
     def close_context(context: BrowserContext):
         context.close()
+
+    @staticmethod
+    def cookies(context: BrowserContext, urls: Union[str, list[str], None] = None):
+        return context.cookies(urls)
