@@ -19,6 +19,10 @@ Goto Tesena, Query Selector Via Page
     Wait For Timeout          ${page}                3000
     ${element}=               Query Selector         ${page}    xpath=//button[contains(@class, "btn-confirm")]
     Log                       ${element}
+    ${banner}=                Query Selector         ${page}    xpath=//div[@id="panel-cookies"]
+    Log                       ${banner}
+    ${accept_button}=         Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
+    Log                       ${accept_button}
     Close Context             ${context}
 
 # Go to YouTube, iHned
