@@ -18,8 +18,7 @@ Goto Tesena, Query Selector Via Page
     Go To                     ${page}                https://www.tesena.com/en
     Wait For Timeout          ${page}                3000
     ${element}=               Query Selector         ${page}    xpath=//button[contains(@class, "btn-confirm")]
-    ${test_result}=           Is Visible             ${element}
-    Should Be True            ${test_result}==True
+    Log                       ${element}
     Close Context             ${context}
 
 # Go to YouTube, iHned

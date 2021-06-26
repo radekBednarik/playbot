@@ -58,3 +58,17 @@ class Playbot:
     @keyword
     def new_page(self, context: PlaybotContext, **kwargs):
         return PlaybotPage(context.context, **kwargs)
+
+    @keyword
+    def go_to(self, page: PlaybotPage, url: str, **kwargs):
+        return page.go_to(page.page, url, **kwargs)
+
+    @keyword
+    def query_selector(
+        self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
+    ):
+        return handle.query_selector(selector)
+
+    @keyword
+    def wait_for_timeout(self, page: PlaybotPage, timeout: float):
+        page.wait_for_timeout(page.page, timeout)

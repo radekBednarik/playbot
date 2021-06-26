@@ -2,12 +2,16 @@
 '''
 
 
+from typing import Union
+from playwright.sync_api import Page, ElementHandle
+
+
 class Handle:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, handle: Union[Page, ElementHandle]) -> None:
+        self.handle: Union[Page, ElementHandle] = handle
 
     def query_selector(self, selector: str):
-        pass
+        return self.handle.query_selector(selector)
 
     def wait_for_selector(self, selector: str, **kwargs):
-        pass
+        return self.handle.wait_for_selector(selector, **kwargs)
