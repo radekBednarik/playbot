@@ -54,3 +54,7 @@ class Playbot:
     @keyword
     def close_context(self, context: PlaybotContext):
         context.close_context(context.context)
+
+    @keyword
+    def new_page(self, context: PlaybotContext, **kwargs):
+        return PlaybotPage(context.context, **kwargs)
