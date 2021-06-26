@@ -4,12 +4,11 @@ by playwright/python library to the robotframework.
 
 from typing import Union
 
-from playwright.sync_api import Browser
+from playwright.sync_api import Browser, ElementHandle
 from robot.api.deco import keyword, library
 
 from playbot.src.browser import PlaybotBrowser
 from playbot.src.context import PlaybotContext
-from playbot.src.element_handle import PlaybotElementHandle
 from playbot.src.page import PlaybotPage
 
 
@@ -56,6 +55,12 @@ class Playbot:
         context.close_context(context.context)
 
     @keyword
+    def cookies(
+        self, context: PlaybotContext, urls: Union[str, list[str], None] = None
+    ):
+        return context.cookies(context.context, urls)
+
+    @keyword
     def new_page(self, context: PlaybotContext, **kwargs):
         return PlaybotPage(context.context, **kwargs)
 
@@ -64,10 +69,14 @@ class Playbot:
         return page.go_to(page.page, url, **kwargs)
 
     @keyword
-    def query_selector(
-        self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
-    ):
+    def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
         return handle.query_selector(selector)
+
+    @keyword
+    def wait_for_selector(
+        self, handle: Union[PlaybotPage, ElementHandle], selector: str, **kwargs
+    ):
+        return handle.wait_for_selector(selector, **kwargs)
 
     @keyword
     def wait_for_timeout(self, page: PlaybotPage, timeout: float):

@@ -11,7 +11,7 @@ ${FALSE}            Convert to boolean=False
 &{VP_600_800}       width=${600}     height=${800}
 
 ***Test Cases***
-Goto Tesena, Query Selector Via Page
+Goto Tesena, Query Selector Via Page, Element
     [Documentation]    get it running
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
@@ -25,36 +25,38 @@ Goto Tesena, Query Selector Via Page
     Log                       ${accept_button}
     Close Context             ${context}
 
-# Go to YouTube, iHned
-#     [Documentation]    get it running
-#     ${context}=               New Context            viewport=&{VP_600_800}
-#     ${page}=                  New Page               ${context}
-#     Go To                     ${page}                https://www.youtube.com
-#     ${page_two}=              New Page               ${context}
-#     Go To                     ${page_two}            https://ihned.cz
-#     Close Context             ${context}
+Go to YouTube, iHned
+    [Documentation]    get it running
+    ${context}=               New Context            viewport=&{VP_600_800}
+    ${page}=                  New Page               ${context}
+    Go To                     ${page}                https://www.youtube.com
+    ${page_two}=              New Page               ${context}
+    Go To                     ${page_two}            https://ihned.cz
+    Close Context             ${context}
 
-# Go to Tesena, Query selector Via element
-#     [Documentation]    get it running
-#     ${context}=               New Context            viewport=&{VP_1920_1080}
-#     ${page}=                  New Page               ${context}
-#     Go To                     ${page}                https://www.tesena.com/en
-#     ${banner}=                Query Selector         ${page}      xpath=//div[@id="panel-cookies"]
-#     ${accept_bttn}=           Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
-#     ${test_result}=           Is Visible             ${accept_bttn}
-#     Should Be True            ${test_result}==True
-#     Close Context             ${context}
+Wait For Selector via Page, Element
+    [Documentation]    get it running
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
+    Go To                     ${page}                https://www.tesena.com/en
+    ${banner}=                Wait For Selector      ${page}      ${locator_banner}
+    Log                       ${banner}
+    ${accept_button}=         Wait For Selector      ${banner}    ${locator_bttn}
+    Log                       ${accept_button}
+    Close Context             ${context}
 
-# Get cookies
-#     [Documentation]    get it running
-#     ${context}=               New Context            viewport=&{VP_1920_1080}
-#     ${page}=                  New Page               ${context}
-#     Go To                     ${page}                https://www.tesena.com
-#     @{all_cookies}=           Cookies                ${context}
-#     Log                       ${all_cookies}
-#     @{tesena_cookies}=        Cookies                ${context}    https://www.tesena.com
-#     Log                       ${tesena_cookies}
-#     @{urls}=                  Create List             https://www.tesena.com    https://www.youtube.com
-#     @{array_cookies}=         Cookies                ${context}    ${urls}
-#     Log                       ${array_cookies}
-#     Close Context             ${context}
+Get cookies
+    [Documentation]    get it running
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    Go To                     ${page}                https://www.tesena.com
+    @{all_cookies}=           Cookies                ${context}
+    Log                       ${all_cookies}
+    @{tesena_cookies}=        Cookies                ${context}    https://www.tesena.com
+    Log                       ${tesena_cookies}
+    @{urls}=                  Create List             https://www.tesena.com    https://www.youtube.com
+    @{array_cookies}=         Cookies                ${context}    ${urls}
+    Log                       ${array_cookies}
+    Close Context             ${context}
