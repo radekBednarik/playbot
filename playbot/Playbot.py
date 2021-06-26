@@ -45,7 +45,7 @@ class Playbot:
 
     @keyword
     def close_browser(self):
-        self._playbot_browser.close_browser(self._playbot_browser.browser)
+        self._playbot_browser.close_browser()
 
     @keyword
     def new_context(self, **kwargs):
@@ -54,38 +54,3 @@ class Playbot:
     @keyword
     def close_context(self, context: PlaybotContext):
         context.close_context(context.context)
-
-    @keyword
-    def cookies(
-        self, context: PlaybotContext, urls: Union[str, list[str], None] = None
-    ):
-        return context.cookies(context.context, urls)
-
-    @keyword
-    def new_page(self, playbot_context: PlaybotContext, **kwargs):
-        return PlaybotPage(playbot_context.context, **kwargs)
-
-    @keyword
-    def go_to(self, browser_page: PlaybotPage, url: str, **kwargs):
-        return browser_page.go_to(browser_page.page, url, **kwargs)
-
-    @keyword
-    def wait_for_timeout(self, page: PlaybotPage, timeout: float):
-        page.wait_for_timeout(page.page, timeout)
-
-    @keyword
-    def query_selector(
-        self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
-    ):
-        if isinstance(handle, PlaybotPage):
-            return PlaybotElementHandle(handle.page, selector)
-        if isinstance(handle, PlaybotElementHandle):
-            return PlaybotElementHandle(handle.element_handle, selector)
-
-    @keyword
-    def is_visible(self, element_handle: PlaybotElementHandle):
-        return element_handle.is_visible(element_handle.element_handle)
-
-    @keyword
-    def is_hidden(self, element_handle: PlaybotElementHandle):
-        return element_handle.is_hidden(element_handle.element_handle)
