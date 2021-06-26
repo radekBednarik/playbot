@@ -69,6 +69,17 @@ class Playbot:
         return page.go_to(page.page, url, **kwargs)
 
     @keyword
+    def is_visible(
+        self,
+        handle: Union[PlaybotPage, ElementHandle],
+        selector: Union[str, None] = None,
+        timeout: Union[float, None] = None,
+    ):
+        if isinstance(handle, PlaybotPage):
+            return handle.is_visible(selector=selector, timeout=timeout)
+        return handle.is_visible()
+
+    @keyword
     def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
         return handle.query_selector(selector)
 

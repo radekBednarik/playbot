@@ -60,3 +60,17 @@ Get cookies
     @{array_cookies}=         Cookies                ${context}    ${urls}
     Log                       ${array_cookies}
     Close Context             ${context}
+
+Is Visible
+    [Documentation]    get it running
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
+    Go To                     ${page}                https://www.tesena.com/en
+    ${banner}=                Wait For Selector      ${page}     ${locator_banner}
+    ${banner_visibility}=     Is Visible             ${banner}
+    Should Be True            ${banner_visibility}==True
+    ${bttn_visibility}=       Is Visible             ${page}     ${locator_bttn}    timeout=5000
+    Should Be True            ${bttn_visibility}==True
+    Close Context             ${context}
