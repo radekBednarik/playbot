@@ -11,15 +11,18 @@ ${FALSE}            Convert to boolean=False
 &{VP_600_800}       width=${600}     height=${800}
 
 ***Test Cases***
-Goto Tesena, Query Selector Via Page
+Goto Tesena, Query Selector Via Page, Element
     [Documentation]    get it running
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.tesena.com/en
     Wait For Timeout          ${page}                3000
     ${element}=               Query Selector         ${page}    xpath=//button[contains(@class, "btn-confirm")]
-    ${test_result}=           Is Visible             ${element}
-    Should Be True            ${test_result}==True
+    Log                       ${element}
+    ${banner}=                Query Selector         ${page}    xpath=//div[@id="panel-cookies"]
+    Log                       ${banner}
+    ${accept_button}=         Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
+    Log                       ${accept_button}
     Close Context             ${context}
 
 Go to YouTube, iHned
@@ -31,15 +34,17 @@ Go to YouTube, iHned
     Go To                     ${page_two}            https://ihned.cz
     Close Context             ${context}
 
-Go to Tesena, Query selector Via element
+Wait For Selector via Page, Element
     [Documentation]    get it running
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
+    ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
     Go To                     ${page}                https://www.tesena.com/en
-    ${banner}=                Query Selector         ${page}      xpath=//div[@id="panel-cookies"]
-    ${accept_bttn}=           Query Selector         ${banner}    xpath=//button[contains(@class, "btn-confirm")]
-    ${test_result}=           Is Visible             ${accept_bttn}
-    Should Be True            ${test_result}==True
+    ${banner}=                Wait For Selector      ${page}      ${locator_banner}
+    Log                       ${banner}
+    ${accept_button}=         Wait For Selector      ${banner}    ${locator_bttn}
+    Log                       ${accept_button}
     Close Context             ${context}
 
 Get cookies

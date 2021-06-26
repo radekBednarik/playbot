@@ -1,7 +1,7 @@
 '''Implements Playwright's Browser.
 '''
 
-from playwright.sync_api import Browser, sync_playwright
+from playwright.sync_api import sync_playwright
 
 
 class PlaybotBrowser:
@@ -23,6 +23,5 @@ class PlaybotBrowser:
                 "You have to select either 'chromium', 'firefox', or 'webkit' as browser."
             )
 
-    @staticmethod
-    def close_browser(browser: Browser):
-        return browser.close()
+    def close_browser(self):
+        return self.browser.close()

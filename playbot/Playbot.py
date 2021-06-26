@@ -4,12 +4,11 @@ by playwright/python library to the robotframework.
 
 from typing import Union
 
-from playwright.sync_api import Browser
+from playwright.sync_api import Browser, ElementHandle
 from robot.api.deco import keyword, library
 
 from playbot.src.browser import PlaybotBrowser
 from playbot.src.context import PlaybotContext
-from playbot.src.element_handle import PlaybotElementHandle
 from playbot.src.page import PlaybotPage
 
 
@@ -45,7 +44,7 @@ class Playbot:
 
     @keyword
     def close_browser(self):
-        self._playbot_browser.close_browser(self._playbot_browser.browser)
+        self._playbot_browser.close_browser()
 
     @keyword
     def new_context(self, **kwargs):
@@ -62,30 +61,23 @@ class Playbot:
         return context.cookies(context.context, urls)
 
     @keyword
-    def new_page(self, playbot_context: PlaybotContext, **kwargs):
-        return PlaybotPage(playbot_context.context, **kwargs)
+    def new_page(self, context: PlaybotContext, **kwargs):
+        return PlaybotPage(context.context, **kwargs)
 
     @keyword
-    def go_to(self, browser_page: PlaybotPage, url: str, **kwargs):
-        return browser_page.go_to(browser_page.page, url, **kwargs)
+    def go_to(self, page: PlaybotPage, url: str, **kwargs):
+        return page.go_to(page.page, url, **kwargs)
+
+    @keyword
+    def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
+        return handle.query_selector(selector)
+
+    @keyword
+    def wait_for_selector(
+        self, handle: Union[PlaybotPage, ElementHandle], selector: str, **kwargs
+    ):
+        return handle.wait_for_selector(selector, **kwargs)
 
     @keyword
     def wait_for_timeout(self, page: PlaybotPage, timeout: float):
         page.wait_for_timeout(page.page, timeout)
-
-    @keyword
-    def query_selector(
-        self, handle: Union[PlaybotPage, PlaybotElementHandle], selector: str
-    ):
-        if isinstance(handle, PlaybotPage):
-            return PlaybotElementHandle(handle.page, selector)
-        if isinstance(handle, PlaybotElementHandle):
-            return PlaybotElementHandle(handle.element_handle, selector)
-
-    @keyword
-    def is_visible(self, element_handle: PlaybotElementHandle):
-        return element_handle.is_visible(element_handle.element_handle)
-
-    @keyword
-    def is_hidden(self, element_handle: PlaybotElementHandle):
-        return element_handle.is_hidden(element_handle.element_handle)
