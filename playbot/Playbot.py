@@ -65,6 +65,17 @@ class Playbot:
         return PlaybotPage(context.context, **kwargs)
 
     @keyword
+    def click(
+        self,
+        handle: Union[PlaybotPage, ElementHandle],
+        selector: Union[str, None] = None,
+        **kwargs
+    ):
+        if isinstance(handle, PlaybotPage):
+            return handle.click(selector, **kwargs)
+        return handle.click(**kwargs)
+
+    @keyword
     def go_to(self, page: PlaybotPage, url: str, **kwargs):
         return page.go_to(page.page, url, **kwargs)
 

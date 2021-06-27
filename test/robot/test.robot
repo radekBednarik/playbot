@@ -84,3 +84,16 @@ Wait For Element State
     ${bttn}=                  Wait For Selector      ${page}    ${locator_bttn}    state=attached
     Wait For Element State    ${bttn}                visible
     Close Context             ${context}
+
+Click
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    ${locator_banner}=       Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_bttn}=         Convert To String       xpath=//button[contains(@class, "btn-confirm")]
+    Go To                    ${page}                 https://www.tesena.com/en
+    ${bttn}=                 Wait For Selector       ${page}    ${locator_bttn}    state=visible
+    Click                    ${bttn}
+    ${state}=                Is Visible              ${page}    ${locator_banner}  timeout=5000
+    Should Not Be True       ${state}==True
+    Close Context            ${context}

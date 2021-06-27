@@ -10,6 +10,13 @@ class Handle:
     def __init__(self, handle: Union[Page, ElementHandle]) -> None:
         self.handle: Union[Page, ElementHandle] = handle
 
+    def click(self, selector: Union[str, None] = None, **kwargs):
+        if isinstance(self.handle, Page) and selector is not None:
+            return self.handle.click(selector, **kwargs)
+
+        if isinstance(self.handle, ElementHandle) and selector is None:
+            return self.handle.click(**kwargs)
+
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):
