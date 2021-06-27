@@ -74,3 +74,13 @@ Is Visible
     ${bttn_visibility}=       Is Visible             ${page}     ${locator_bttn}    timeout=5000
     Should Be True            ${bttn_visibility}==True
     Close Context             ${context}
+
+Wait For Element State
+    [Documentation]    get it running
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
+    Go To                     ${page}                https://www.tesena.com/en
+    ${bttn}=                  Wait For Selector      ${page}    ${locator_bttn}    state=attached
+    Wait For Element State    ${bttn}                visible
+    Close Context             ${context}

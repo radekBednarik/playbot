@@ -2,7 +2,7 @@
 by playwright/python library to the robotframework.
 """
 
-from typing import Union
+from typing import Literal, Union
 
 from playwright.sync_api import Browser, ElementHandle
 from robot.api.deco import keyword, library
@@ -82,6 +82,15 @@ class Playbot:
     @keyword
     def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
         return handle.query_selector(selector)
+
+    @keyword
+    def wait_for_element_state(
+        self,
+        handle: ElementHandle,
+        state: Literal["visible", "hidden", "enabled", "disabled", "editable"],
+        **kwargs
+    ):
+        return handle.wait_for_element_state(state, **kwargs)
 
     @keyword
     def wait_for_selector(
