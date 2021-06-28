@@ -1,7 +1,7 @@
 ***Settings***
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -96,4 +96,12 @@ Click
     Click                    ${bttn}
     ${state}=                Is Visible              ${page}    ${locator_banner}  timeout=5000
     Should Not Be True       ${state}==True
+    Close Context            ${context}
+
+Wait For Load State
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en
+    Wait For Load State      ${page}                 state=networkidle    timeout=10000
     Close Context            ${context}

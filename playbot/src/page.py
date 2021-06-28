@@ -1,6 +1,7 @@
 '''Implements Playwright's Page.
 '''
 
+from typing import Literal, Union
 from playwright.sync_api import BrowserContext, Page
 from playbot.src.handle import Handle
 
@@ -17,6 +18,14 @@ class PlaybotPage(Handle):
     @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
+
+    @staticmethod
+    def wait_for_load_state(
+        page: Page,
+        state: Union[Literal["load", "domcontentloaded", "networkidle"], None] = "load",
+        timeout: Union[float, None] = None,
+    ):
+        return page.wait_for_load_state(state=state, timeout=timeout)
 
     @staticmethod
     def wait_for_timeout(page: Page, timeout: float):

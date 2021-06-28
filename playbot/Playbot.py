@@ -47,7 +47,7 @@ class Playbot:
         user is expected to start the browser only ONCE, ideally using
         *Suite Setup* and close the browser using *Suite Teardown*.
 
-        Starting browser is time and resource expensive. For isolated test runs,
+        Starting browser is time and memory expensive. For isolated test runs,
         user wants to use browser contexts.
 
         See https://playwright.dev/python/docs/api/class-browsertype#browser-type-launch for
@@ -338,6 +338,29 @@ class Playbot:
         | Wait For Element State | ${element}        | visible               |             |                |
         '''
         return handle.wait_for_element_state(state, **kwargs)
+
+    @keyword
+    def wait_for_load_state(
+        self,
+        page: PlaybotPage,
+        state: Union[Literal["load", "domcontentloaded", "networkidle"], None] = "load",
+        timeout: Union[float, None] = None,
+    ):
+        '''Returns, when the given load state of the page was reached.
+
+        Default state is set to _load_.
+
+        See https://playwright.dev/python/docs/api/class-page#page-wait-for-load-state for
+        documentation.
+
+        == Example ==
+
+        | =A=                 | =B=      | =C=                  | =D=           |
+        | ${page}=            | New Page | ${context}           |               |
+        | Go To               | ${page}  | https://some/url.com |               |
+        | Wait For Load State | ${page}  | state=networkidle    | timeout=10000 |
+        '''
+        return page.wait_for_load_state(page.page, state=state, timeout=timeout)
 
     @keyword
     def wait_for_selector(
