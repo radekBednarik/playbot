@@ -2,7 +2,7 @@
 by playwright/python library to the robotframework.
 """
 
-from typing import Literal, Optional, Union
+from typing import Literal, Union
 
 from playwright.sync_api import Browser, ElementHandle
 from robot.api.deco import keyword, library
@@ -34,7 +34,7 @@ class Playbot:
 
         |       =A=      |               =B=                   |              =C=                  |
         | ***Settings*** |                                     |                                   |
-        | Library        | ${EXECDIR}${/}playbot${/}Playbot.py | browser=[chromium|firefox|webkit] |
+        | Library        | ${EXECDIR}${/}playbot${/}Playbot.py | browser=<chromium|firefox|webkit> |
         '''
         self._selected_browser: str = browser
         self._playbot_browser: Union[None, Browser] = None
@@ -226,6 +226,18 @@ class Playbot:
 
     @keyword
     def go_to(self, page: PlaybotPage, url: str, **kwargs):
+        '''Navigates to given url. Returns the response of the last redirect.
+
+        See https://playwright.dev/python/docs/api/class-page#page-goto for
+        the documentation.
+
+        == Example ==
+
+        | =A=          | =B=      | =C=                  | =D=                    | =E=                    |
+        | ${page}=     | New Page | ${context}           |                        |                        |
+        | Go To        | ${page}  | https://some/url.com |                        |                        |
+        | ${response}= | Go To    | ${page}              | https://some/url.com   | wait_until=networkidle |
+        '''
         return page.go_to(page.page, url, **kwargs)
 
     @keyword
@@ -235,12 +247,69 @@ class Playbot:
         selector: Union[str, None] = None,
         timeout: Union[float, None] = None,
     ):
+        '''Predicate. Verifies, whether element is visible.
+
+        Can be used with *PlaybotPage* or *ElementHandle*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-is-visible for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-is-visible for
+        element variant documentation.
+
+        == Example ==
+
+        === Is Visible with page and selector ===
+
+        | =A=            | =B=               | =C=                  | =D=         | =E=          |
+        | ${page}=       | New Page          | ${context}           |             |              |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |              |
+        | ${status}=     | Is Visible        | ${page}              | ${selector} | timeout=5000 |
+        | Should Be True | ${status}==True   |                      |             |              |
+
+        === Is Visible with element ===
+
+        | =A=            | =B=               | =C=                  | =D=         |
+        | ${page}=       | New Page          | ${context}           |             |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |
+        | ${element}=    | Query Selector    | ${page}              | ${selector} |
+        | ${status}=     | Is Visible        | ${element}           |             |
+        | Should Be True | ${status}==True   |                      |             |
+        '''
         if isinstance(handle, PlaybotPage):
             return handle.is_visible(selector=selector, timeout=timeout)
         return handle.is_visible()
 
     @keyword
     def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
+        '''Finds and returns element that matches the given selector. If no element is found, returns _None_.
+
+        Can be used with *PlaybotPage* or *ElementHandle*.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-query-selector for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-query-selector for
+        element variant documentation.
+
+        == Example ==
+
+        === Query Selector with page and selector ===
+
+        | =A=              | =B=               | =C=                    | =D=             |
+        | ${page}=         | New Page          | ${context}             |                 |
+        | ${selector_one}= | Convert To String | xpath=//some-selector1 |                 |
+        | ${element_one}=  | Query Selector    | ${page}                | ${selector_one} |
+
+        === Query Selector from the element ===
+
+        | =A=              | =B=               | =C=                    | =D=             |
+        | ${page}=         | New Page          | ${context}             |                 |
+        | ${selector_one}= | Convert To String | xpath=//some-selector1 |                 |
+        | ${selector_two}= | Convert To String | xpath=//some-selector2 |                 |
+        | ${element_one}=  | Query Selector    | ${page}                | ${selector_one} |
+        | ${element_two}=  | Query Selector    | ${element_one}         | ${selector_two} |
+        '''
         return handle.query_selector(selector)
 
     @keyword
