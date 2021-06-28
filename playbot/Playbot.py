@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name, line-too-long
+
 """Playbot provides very basic operations/keywords
 by playwright/python library to the robotframework.
 """
@@ -319,14 +321,73 @@ class Playbot:
         state: Literal["visible", "hidden", "enabled", "disabled", "editable"],
         **kwargs
     ):
+        '''Waits, until given state is satisfied. If state is not satisfied until given timeout, the
+        keyword will throw an error.
+
+        Returns None.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-wait-for-element-state for
+        documentation.
+
+        == Example ==
+
+        | =A=                    | =B=               | =C=                   | =D=         | =E=            |
+        | ${page}=               | New Page          | ${context}            |             |                |
+        | ${selector}=           | Convert To String | xpath=//some-selector |             |                |
+        | ${element}=            | Wait For Selector | ${page}               | ${selector} | state=attached |
+        | Wait For Element State | ${element}        | visible               |             |                |
+        '''
         return handle.wait_for_element_state(state, **kwargs)
 
     @keyword
     def wait_for_selector(
         self, handle: Union[PlaybotPage, ElementHandle], selector: str, **kwargs
     ):
+        '''Returns element, if matches the given selector and if satisfies the state option (in **kwargs).
+        Default options for state is _visible_.
+
+        If the element is not returned withing given timeout, the keyword will throw.
+
+        This keyword can be used with *PlaybotPage* or *ElementHandle*.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-wait-for-selector for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-wait-for-selector for
+        element variant documentation.
+
+        == Example ==
+
+        === Wait For Selector with page and selector ===
+
+        | =A=          | =B=               | =C=                   | =D=         | =E=            |
+        | ${page}=     | New Page          | ${context}            |             |                |
+        | ${selector}= | Convert To String | xpath=//some-selector |             |                |
+        | ${element}=  | Wait For Selector | ${page}               | ${selector} |                |
+        | ${element}=  | Wait For Selector | ${page}               | ${selector} | state=attached |
+
+        === Wait For Selector with element and selector ===
+
+        | =A=           | =B=               | =C=                    | =D=         | =E=            |
+        | ${page}=      | New Page          | ${context}             |             |                |
+        | ${selector}=  | Convert To String | xpath=//some-selector  |             |                |
+        | ${selector_2} | Convert To String | xpath=//some-selector2 |             |                |
+        | ${element}=   | Wait For Selector | ${page}                | ${selector} |                |
+        | ${element2}=  | Wait For Selector | ${element}             | ${selector} | state=visible  |
+        '''
         return handle.wait_for_selector(selector, **kwargs)
 
     @keyword
     def wait_for_timeout(self, page: PlaybotPage, timeout: float):
+        '''Waits for given timeout provided in miliseconds.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-wait-for-timeout for
+        documentation.
+
+        == Example ==
+
+        | =A=              | =B=      | =C=        |
+        | ${page}=         | New Page | ${context} |
+        | Wait For Timeout | ${page}  | 5000       |
+        '''
         page.wait_for_timeout(page.page, timeout)
