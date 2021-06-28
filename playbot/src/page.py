@@ -1,7 +1,7 @@
 '''Implements Playwright's Page.
 '''
 
-from typing import Literal, Union
+from typing import Callable, Literal, Pattern, Union
 from playwright.sync_api import BrowserContext, Page
 from playbot.src.handle import Handle
 
@@ -30,3 +30,7 @@ class PlaybotPage(Handle):
     @staticmethod
     def wait_for_timeout(page: Page, timeout: float):
         page.wait_for_timeout(timeout)
+
+    @staticmethod
+    def wait_for_url(page: Page, url: Union[str, Pattern, Callable], **kwargs):
+        return page.wait_for_url(url, **kwargs)

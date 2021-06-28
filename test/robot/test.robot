@@ -105,3 +105,13 @@ Wait For Load State
     Go To                    ${page}                 https://www.tesena.com/en
     Wait For Load State      ${page}                 state=networkidle    timeout=10000
     Close Context            ${context}
+
+Wait For Url
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    ${services_selector}=    Convert To String       //nav[@id="menu-main"]//a[contains(@href, "services")]/span
+    Go To                    ${page}                 https://www.tesena.com/en    wait_until=domcontentloaded
+    Click                    ${page}                 ${services_selector}
+    Wait For Url             ${page}                 **/services    wait_until=networkidle    timeout=${30000}
+    Close Context            ${context}

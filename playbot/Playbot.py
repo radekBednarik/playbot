@@ -4,7 +4,7 @@
 by playwright/python library to the robotframework.
 """
 
-from typing import Literal, Union
+from typing import Callable, Literal, Pattern, Union
 
 from playwright.sync_api import Browser, ElementHandle
 from robot.api.deco import keyword, library
@@ -414,3 +414,25 @@ class Playbot:
         | Wait For Timeout | ${page}  | 5000       |
         '''
         page.wait_for_timeout(page.page, timeout)
+
+    @keyword
+    def wait_for_url(
+        self, page: PlaybotPage, url: Union[str, Pattern, Callable], **kwargs
+    ):
+        '''Waits until the navigation to the given _url_ is completed.
+
+        This keyword can be used, when interaction (e.g. click) with some element of
+        the page leads to indirect navigation.
+
+        See https://playwright.dev/python/docs/api/class-page#page-wait-for-url for
+        documentation.
+
+        == Example ==
+
+        | =A=          | =B=               | =C=                   | =D=                    | =E=           |
+        | ${selector}= | Convert To String | xpath=//some-selector |                        |               |
+        | ${page}=     | New Page          | ${context}            |                        |               |
+        | Click        | ${page}           | ${selector}           |                        |               |
+        | Wait For Url | ${page}           | **/page.html          | wait_until=networkidle | timeout=30000 |
+        '''
+        return page.wait_for_url(page.page, url, **kwargs)
