@@ -16,6 +16,10 @@ class PlaybotPage(Handle):
         return self._browser_context.new_page(**kwargs)
 
     @staticmethod
+    def close_page(page: Page, run_before_unload: Union[bool, None] = None):
+        return page.close(run_before_unload=run_before_unload)
+
+    @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
 

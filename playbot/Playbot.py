@@ -190,6 +190,24 @@ class Playbot:
         return PlaybotPage(context.context, **kwargs)
 
     @keyword
+    def close_page(
+        self, page: PlaybotPage, run_before_unload: Union[bool, None] = None
+    ):
+        '''Closes the given page.
+
+        See https://playwright.dev/python/docs/api/class-page#page-close for
+        documentation.
+
+        == Example ==
+
+        | =A=        | =B=      | =C=                  |
+        | ${page}=   | New Page | ${context}           |
+        | Go To      | ${page}  | https://some/url.com |
+        | Close Page | ${page}  |                      |
+        '''
+        return page.close_page(page.page, run_before_unload=run_before_unload)
+
+    @keyword
     def click(
         self,
         handle: Union[PlaybotPage, ElementHandle],

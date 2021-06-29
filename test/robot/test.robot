@@ -130,3 +130,11 @@ Query Selector All
     @{menu_items_2}=         Query Selector All      ${menu}                       ${menu_items_only_sel}
     Should Not Be Empty      ${menu_items_2}
     Close Context            ${context}
+
+Close Page
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en    wait_until=domcontentloaded
+    Close Page               ${page}
+    Close Context            ${context}
