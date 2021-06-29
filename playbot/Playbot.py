@@ -6,7 +6,7 @@ by playwright/python library to the robotframework.
 
 from typing import Callable, Literal, Pattern, Union
 
-from playwright.sync_api import Browser, ElementHandle
+from playwright.sync_api import Browser, ElementHandle, Frame
 from robot.api.deco import keyword, library
 
 from playbot.src.browser import PlaybotBrowser
@@ -210,19 +210,22 @@ class Playbot:
     @keyword
     def click(
         self,
-        handle: Union[PlaybotPage, ElementHandle],
+        handle: Union[PlaybotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         **kwargs
     ):
         '''Click element.
 
-        This keyword can be used either with *PlaybotPage* or with *ElementHandle*.
+        This keyword can be used either with *<PlaybotPage>*, *<Frame>* or with *<ElementHandle>*.
 
         See https://playwright.dev/python/docs/api/class-page#page-click for
         click with page.
 
         See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-click for
         click with element.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-click for
+        click with frame.
 
         == Example ==
 
@@ -234,14 +237,23 @@ class Playbot:
         | Click       | ${page}     | ${selector} |
 
         === Click using element ===
+
         | =A=          | =B=               | =C=                   | =D=         |
         | ${page}=     | New Page          | ${context}            |             |
         | ${selector}= | Convert to string | xpath=//some-selector |             |
         | ${element}=  | Query Selector    | ${page}               | ${selector} |
         | Click        | ${element}        |                       |             |
+
+        === Click using Frame ===
+
+        | =A=                   | =B=               | =C=                   | =D=            |
+        | ${page}=              | New Page          | ${context}            |                |
+        | ${frame}=             | Frame             | ${page}               | name=some_name |
+        | ${in_frame_selector}= | Convert To String | xpath=//some-selector |                |
+        | Click                 | ${frame}          | ${in_frame_selector}  |                |
         '''
-        if isinstance(handle, PlaybotPage):
-            return handle.click(selector, **kwargs)
+        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+            return handle.click(selector=selector, **kwargs)
         return handle.click(**kwargs)
 
     @keyword
