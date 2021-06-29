@@ -265,7 +265,7 @@ class Playbot:
         | =A=       | =B=      | =C=        | =D =                       |
         | ${page}=  | New Page | ${context} |                            |
         | ${frame}= | Frame    | ${page}    | https://some/url/of/iframe |
-        | ${frame}= | Frame    | ${page}    | **/some/pattern            |
+        | ${frame}= | Frame    | ${page}    | url=**/some/pattern        |
         | ${frame}= | Frame    | ${page}    | name=frame_name            |
         '''
         return page.frame(page.page, name=name, url=url)
