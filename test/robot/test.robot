@@ -115,3 +115,18 @@ Wait For Url
     Click                    ${page}                 ${services_selector}
     Wait For Url             ${page}                 **/services    wait_until=networkidle    timeout=${30000}
     Close Context            ${context}
+
+Query Selector All
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    ${menu_sel}=             Convert To String       xpath=//ul[@id="menu-1"]
+    ${menu_items_sel}=       Convert To String       xpath=//ul[@id="menu-1"]/li
+    ${menu_items_only_sel}=  Convert To String       xpath=//li
+    Go To                    ${page}                 https://www.tesena.com/en     wait_until=domcontentloaded
+    @{menu_items}=           Query Selector All      ${page}                       ${menu_items_sel}
+    Should Not Be Empty      ${menu_items}
+    ${menu}=                 Query Selector          ${page}                       ${menu_sel}
+    @{menu_items_2}=         Query Selector All      ${menu}                       ${menu_items_only_sel}
+    Should Not Be Empty      ${menu_items_2}
+    Close Context            ${context}

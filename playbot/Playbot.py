@@ -1,4 +1,4 @@
-# pylint: disable=invalid-name, line-too-long
+# pylint: disable=invalid-name, line-too-long, no-self-use
 
 """Playbot provides very basic operations/keywords
 by playwright/python library to the robotframework.
@@ -313,6 +313,41 @@ class Playbot:
         | ${element_two}=  | Query Selector    | ${element_one}         | ${selector_two} |
         '''
         return handle.query_selector(selector)
+
+    @keyword
+    def query_selector_all(
+        self, handle: Union[PlaybotPage, ElementHandle], selector: str
+    ):
+        '''Finds all elements matching given selector and returns them in _list_. If no
+        elements are found, returns an empty _list_.
+
+        This keyword can be used with *PlaybotPage* or *ElementHandle*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-query-selector-all for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-query-selector-all for
+        element variant documentation.
+
+        == Example ==
+
+        === With Page ===
+
+        | =A=          | =B=                | =C=                   | =D=         |
+        | ${page}=     | New Page           | ${context}            |             |
+        | ${selector}= | Convert To String  | xpath=//some-selector |             |
+        | @{elements}= | Query Selector All | ${page}               | ${selector} |
+
+        === With Element ===
+
+        | =A=            | =B=                | =C=                    | =D=           |
+        | ${page}=       | New Page           | ${context}             |               |
+        | ${selector_1}= | Convert To String  | xpath=//some-selector1 |               |
+        | ${selector_2}= | Convert To String  | xpath=//some-selector2 |               |
+        | ${element}=    | Query Selector     | ${page}                | ${selector_1} |
+        | @{elements}=   | Query Selector All | ${element}             | ${selector_2} |
+        '''
+        return handle.query_selector_all(selector)
 
     @keyword
     def wait_for_element_state(
