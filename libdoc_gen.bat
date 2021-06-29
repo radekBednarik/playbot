@@ -1,0 +1,1 @@
+libdoc -f html playbot\Playbot.py docs\index.html
