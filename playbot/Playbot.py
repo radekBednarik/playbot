@@ -245,6 +245,32 @@ class Playbot:
         return handle.click(**kwargs)
 
     @keyword
+    def frame(
+        self,
+        page: PlaybotPage,
+        name: Union[str, None] = None,
+        url: Union[str, Pattern, Callable, None] = None,
+    ):
+        '''Returns frame matching the given arguments.
+
+        You have to provide either _name_ or _url_.
+
+        See https://playwright.dev/python/docs/api/class-page#page-frame for
+        documentation.
+
+        Returns *<Frame>* object.
+
+        == Example ==
+
+        | =A=       | =B=      | =C=        | =D =                       |
+        | ${page}=  | New Page | ${context} |                            |
+        | ${frame}= | Frame    | ${page}    | https://some/url/of/iframe |
+        | ${frame}= | Frame    | ${page}    | **/some/pattern            |
+        | ${frame}= | Frame    | ${page}    | name=frame_name            |
+        '''
+        return page.frame(page.page, name=name, url=url)
+
+    @keyword
     def go_to(self, page: PlaybotPage, url: str, **kwargs):
         '''Navigates to given url. Returns the response of the last redirect.
 

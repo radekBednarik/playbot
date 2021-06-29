@@ -20,6 +20,14 @@ class PlaybotPage(Handle):
         return page.close(run_before_unload=run_before_unload)
 
     @staticmethod
+    def frame(
+        page: Page,
+        name: Union[str, None] = None,
+        url: Union[str, Pattern, Callable, None] = None,
+    ):
+        return page.frame(name=name, url=url)
+
+    @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
 
