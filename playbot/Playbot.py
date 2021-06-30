@@ -6,7 +6,7 @@ by playwright/python library to the robotframework.
 
 from typing import Callable, Literal, Pattern, Union
 
-from playwright.sync_api import Browser, ElementHandle
+from playwright.sync_api import Browser, ElementHandle, Frame
 from robot.api.deco import keyword, library
 
 from playbot.src.browser import PlaybotBrowser
@@ -210,13 +210,13 @@ class Playbot:
     @keyword
     def click(
         self,
-        handle: Union[PlaybotPage, ElementHandle],
+        handle: Union[PlaybotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         **kwargs
     ):
         '''Click element.
 
-        This keyword can be used either with *PlaybotPage* or with *ElementHandle*.
+        This keyword can be used either with *<PlaybotPage>*, *<Frame>* or with *<ElementHandle>*.
 
         See https://playwright.dev/python/docs/api/class-page#page-click for
         click with page.
@@ -224,25 +224,83 @@ class Playbot:
         See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-click for
         click with element.
 
+        See https://playwright.dev/python/docs/api/class-frame/#frame-click for
+        click with frame.
+
         == Example ==
 
         === Click using page and selector ===
 
-        | =A=         | =B=         | =C=        |
-        | ${page}=    | New Page    | ${context} |
+        | =A=          | =B=               | =C=                   |
+        | ${page}=     | New Page          | ${context}            |
         | ${selector}= | Convert to string | xpath=//some-selector |
-        | Click       | ${page}     | ${selector} |
+        | Click        | ${page}           | ${selector}           |
 
         === Click using element ===
+
         | =A=          | =B=               | =C=                   | =D=         |
         | ${page}=     | New Page          | ${context}            |             |
         | ${selector}= | Convert to string | xpath=//some-selector |             |
         | ${element}=  | Query Selector    | ${page}               | ${selector} |
         | Click        | ${element}        |                       |             |
+
+        === Click using Frame ===
+
+        | =A=                   | =B=               | =C=                   | =D=            |
+        | ${page}=              | New Page          | ${context}            |                |
+        | ${frame}=             | Frame             | ${page}               | name=some_name |
+        | ${in_frame_selector}= | Convert To String | xpath=//some-selector |                |
+        | Click                 | ${frame}          | ${in_frame_selector}  |                |
         '''
-        if isinstance(handle, PlaybotPage):
-            return handle.click(selector, **kwargs)
+        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+            return handle.click(selector=selector, **kwargs)
         return handle.click(**kwargs)
+
+    @keyword
+    def content_frame(self, handle: ElementHandle):
+        '''Returns the content frame for given <ElementHandle>. Else returns <None>.
+
+        This keyword is very usefull, when the iframe element does not have _name_ attribute and/or
+        dynamic url, so keyword *Frame* is not usable.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-content-frame for
+        documentation.
+
+        == Example ==
+
+        | =A=                | =B=               | =C=                   |                   |
+        | ${page}=           | New Page          | ${context}            |                   |
+        | ${iframe_locator}= | Convert To String | xpath=//some-selector |                   |
+        | ${iframe_element}= | Query Selector    | ${page}               | ${iframe_locator} |
+        | ${frame}=          | Content Frame     | ${iframe_element}     |                   |
+        '''
+        return handle.content_frame()
+
+    @keyword
+    def frame(
+        self,
+        page: PlaybotPage,
+        name: Union[str, None] = None,
+        url: Union[str, Pattern, Callable, None] = None,
+    ):
+        '''Returns frame matching the given arguments.
+
+        You have to provide either _name_ or _url_.
+
+        See https://playwright.dev/python/docs/api/class-page#page-frame for
+        documentation.
+
+        Returns *<Frame>* object.
+
+        == Example ==
+
+        | =A=       | =B=      | =C=        | =D =                       |
+        | ${page}=  | New Page | ${context} |                            |
+        | ${frame}= | Frame    | ${page}    | https://some/url/of/iframe |
+        | ${frame}= | Frame    | ${page}    | url=**/some/pattern        |
+        | ${frame}= | Frame    | ${page}    | name=frame_name            |
+        '''
+        return page.frame(page.page, name=name, url=url)
 
     @keyword
     def go_to(self, page: PlaybotPage, url: str, **kwargs):

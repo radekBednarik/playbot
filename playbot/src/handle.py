@@ -3,19 +3,23 @@
 
 
 from typing import Literal, Union
-from playwright.sync_api import Page, ElementHandle
+from playwright.sync_api import Page, ElementHandle, Frame
 
 
 class Handle:
-    def __init__(self, handle: Union[Page, ElementHandle]) -> None:
-        self.handle: Union[Page, ElementHandle] = handle
+    def __init__(self, handle: Union[Page, ElementHandle, Frame]) -> None:
+        self.handle: Union[Page, ElementHandle, Frame] = handle
 
     def click(self, selector: Union[str, None] = None, **kwargs):
-        if isinstance(self.handle, Page) and selector is not None:
-            return self.handle.click(selector, **kwargs)
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.click(selector=selector, **kwargs)
 
         if isinstance(self.handle, ElementHandle) and selector is None:
             return self.handle.click(**kwargs)
+
+    def content_frame(self):
+        if isinstance(self.handle, ElementHandle):
+            return self.handle.content_frame()
 
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
