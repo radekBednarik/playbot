@@ -17,6 +17,10 @@ class Handle:
         if isinstance(self.handle, ElementHandle) and selector is None:
             return self.handle.click(**kwargs)
 
+    def content_frame(self):
+        if isinstance(self.handle, ElementHandle):
+            return self.handle.content_frame()
+
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):

@@ -231,10 +231,10 @@ class Playbot:
 
         === Click using page and selector ===
 
-        | =A=         | =B=         | =C=        |
-        | ${page}=    | New Page    | ${context} |
+        | =A=          | =B=               | =C=                   |
+        | ${page}=     | New Page          | ${context}            |
         | ${selector}= | Convert to string | xpath=//some-selector |
-        | Click       | ${page}     | ${selector} |
+        | Click        | ${page}           | ${selector}           |
 
         === Click using element ===
 
@@ -255,6 +255,26 @@ class Playbot:
         if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
             return handle.click(selector=selector, **kwargs)
         return handle.click(**kwargs)
+
+    @keyword
+    def content_frame(self, handle: ElementHandle):
+        '''Returns the content frame for given <ElementHandle>. Else returns <None>.
+
+        This keyword is very usefull, when the iframe element does not have _name_ attribute and/or
+        dynamic url, so keyword *Frame* is not usable.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle#element-handle-content-frame for
+        documentation.
+
+        == Example ==
+
+        | =A=                | =B=               | =C=                   |                   |
+        | ${page}=           | New Page          | ${context}            |                   |
+        | ${iframe_locator}= | Convert To String | xpath=//some-selector |                   |
+        | ${iframe_element}= | Query Selector    | ${page}               | ${iframe_locator} |
+        | ${frame}=          | Content Frame     | ${iframe_element}     |                   |
+        '''
+        return handle.content_frame()
 
     @keyword
     def frame(

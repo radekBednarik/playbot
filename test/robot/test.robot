@@ -146,3 +146,13 @@ Frame
     Go To                    ${page}                 https://ihned.cz/    wait_until=networkidle
     ${frame}=                Frame                   ${page}              name=__tcfapiLocator
     Close Context            ${context}
+
+Content Frame
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/insights     wait_until=networkidle
+    @{iframes}=              Query Selector All      ${page}                                xpath=//iframe
+    Should Not Be Empty      ${iframes}
+    ${frame}=                Content Frame           ${iframes}[0]
+    Close Context            ${context}
