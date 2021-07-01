@@ -1,7 +1,7 @@
 ***Settings***
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
 
-Suite Setup       Start Browser   headless=${TRUE}
+Suite Setup       Start Browser   headless=${FALSE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -155,4 +155,18 @@ Content Frame
     @{iframes}=              Query Selector All      ${page}                                xpath=//iframe
     Should Not Be Empty      ${iframes}
     ${frame}=                Content Frame           ${iframes}[0]
+    Close Context            ${context}
+
+Check
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
+    ${checkbox_sel}=         Convert To String       //input[@type="checkbox" and contains(@aria-label, "consent")]
+    # Page and selector
+    Check                    ${page}                 ${checkbox_sel}
+    Wait For Timeout         ${page}                 5000
+    # element
+    ${checkbox}=             Query Selector          ${page}    ${checkbox_sel}
+    Check                    ${checkbox}
     Close Context            ${context}

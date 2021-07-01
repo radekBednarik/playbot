@@ -208,6 +208,51 @@ class Playbot:
         return page.close_page(page.page, run_before_unload=run_before_unload)
 
     @keyword
+    def check(
+        self,
+        handle: Union[PlaybotPage, ElementHandle, Frame],
+        selector: Union[str, None] = None,
+        **kwargs
+    ):
+        '''Checks an element.
+
+        This keyword is usable with *<PlaybotPage>*, *<ElementHandle>* and *<Frame>*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-check for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-check for
+        element variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-check for
+        frame variant documentation.
+
+        == Example ==
+
+        === Check element by Page and selector ===
+
+        | =A=         | =B=         | =C=       |
+        | Check       | ${page}     | #id=my-id |
+
+        === Check element by Frame and selector ===
+
+        | =A=         | =B=         | =C=       | =D=           |
+        | ${frame}=   | Frame       | ${page}   | name=my-frame |
+        | Check       | ${frame}    | #id=my-id |               |
+
+        === Check element by ElementHandle ===
+
+        | =A=         | =B=           | =C=     | =D=       |
+        | ${element}= | ElementHandle | ${page} | #id=my-id |
+        | Check       | ${element}    |         |           |
+
+        '''
+        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+            return handle.check(selector, **kwargs)
+
+        return handle.check(**kwargs)
+
+    @keyword
     def click(
         self,
         handle: Union[PlaybotPage, ElementHandle, Frame],
