@@ -1,5 +1,5 @@
-'''Implements Playwright's Page.
-'''
+"""Implements Playwright's Page.
+"""
 
 from typing import Callable, Literal, Pattern, Union
 from playwright.sync_api import BrowserContext, Page

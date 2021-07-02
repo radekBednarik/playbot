@@ -1,5 +1,5 @@
-'''Implements Playwright's browser's Context.
-'''
+"""Implements Playwright's browser's Context.
+"""
 
 from typing import Union
 

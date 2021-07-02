@@ -1,7 +1,8 @@
 ***Settings***
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
+Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -164,9 +165,13 @@ Check
     Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
     ${checkbox_sel}=         Convert To String       //input[@type="checkbox" and contains(@aria-label, "consent")]
     # Page and selector
-    Check                    ${page}                 ${checkbox_sel}
+    ${ret}=                  Check                   ${page}                 ${checkbox_sel}
+    ${type_check}=           Is Type                 ${ret}                  None
+    Should Be True           ${type_check}==True
     Wait For Timeout         ${page}                 5000
     # element
     ${checkbox}=             Query Selector          ${page}    ${checkbox_sel}
-    Check                    ${checkbox}
+    ${ret2}=                 Check                   ${checkbox}
+    ${type_check2}=          Is Type                 ${ret2}                  None
+    Should Be True           ${type_check2}==True
     Close Context            ${context}

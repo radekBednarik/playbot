@@ -1,5 +1,5 @@
-'''Implements methods shared by Page and ElementHandle classes.
-'''
+"""Implements methods shared by Page and ElementHandle classes.
+"""
 
 
 from typing import Literal, Union
