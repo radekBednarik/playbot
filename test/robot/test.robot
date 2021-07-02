@@ -168,10 +168,26 @@ Check
     ${ret}=                  Check                   ${page}                 ${checkbox_sel}
     ${type_check}=           Is Type                 ${ret}                  None
     Should Be True           ${type_check}==True
-    Wait For Timeout         ${page}                 5000
     # element
     ${checkbox}=             Query Selector          ${page}    ${checkbox_sel}
     ${ret2}=                 Check                   ${checkbox}
     ${type_check2}=          Is Type                 ${ret2}                  None
+    Should Be True           ${type_check2}==True
+    Close Context            ${context}
+
+Fill
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
+    ${first_name_sel}=       Convert To String       xpath=//input[@name="First Name"]
+    ${last_name_sel}=        Convert To String       xpath=//input[@name="Last Name"]
+    ${test_phrase}=          Convert To String       this is a test
+    ${fn_ret}=               Fill                    ${page}                    ${first_name_sel}    value=${test_phrase}
+    ${type_check1}=          Is Type                 ${fn_ret}                  None
+    Should Be True           ${type_check1}==True
+    ${ln_element}=           Query Selector          ${page}    ${last_name_sel}
+    ${ln_ret}=               Fill                    ${ln_element}              value=${test_phrase}
+    ${type_check2}=          Is Type                 ${ln_ret}                  None
     Should Be True           ${type_check2}==True
     Close Context            ${context}

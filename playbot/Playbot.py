@@ -322,6 +322,49 @@ class Playbot:
         return handle.content_frame()
 
     @keyword
+    def fill(
+        self,
+        handle: Union[PlaybotPage, ElementHandle, Frame],
+        selector: Union[str, None] = None,
+        value: str = "",
+        **kwargs
+    ):
+        """Fills an element.
+
+        This keyword is usable with *<PlaybotPage>*, *<ElementHandle>* and *<Frame>*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-fill for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-fill for
+        frame variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-fill for
+        element variant documentation.
+
+        == Example ==
+
+        === Fill element by Page and selector ===
+
+        | =A=  | =B=     | =C=       | =D=                        |
+        | Fill | ${page} | #id=my-id | some value to be filled in |
+
+        === Fill element by Frame and selector ===
+
+        | =A=  | =B=      | =C=       | =D=                        |
+        | Fill | ${frame} | #id=my-id | some value to be filled in |
+
+        === Fill element by ElementHandle ===
+
+        | =A=  | =B=        | =C=                        |
+        | Fill | ${element} | some value to be filled in |
+        """
+        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+            return handle.fill(selector, value, **kwargs)
+
+        return handle.fill(value, **kwargs)
+
+    @keyword
     def frame(
         self,
         page: PlaybotPage,
