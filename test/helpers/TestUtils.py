@@ -20,11 +20,17 @@ class TestUtils:
             "str", "int", "float", "list", "dict", "tuple", "set", "frozenset", "None"
         ],
     ):
-        """Check if an object is an instance of a built-in type.
+        """Checks, if `obj` is of given `type`.
 
-        Arguments:
-        obj -- object to check
-        type_ -- class to check against
+        Args:
+            obj (Any): object to check
+            type_ (Literal): literal of type to check against, e.g. "str", "int", "float", ...
+
+        Raises:
+            Exception: "Invalid type" , if `type_` is not one of the supported types
+
+        Returns:
+            bool: `true` if `obj` is of given `type`, else `false`.
         """
         if type_ == "None":
             return obj is None
