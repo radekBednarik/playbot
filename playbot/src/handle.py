@@ -1,5 +1,5 @@
-'''Implements methods shared by Page and ElementHandle classes.
-'''
+"""Implements methods shared by Page and ElementHandle classes.
+"""
 
 
 from typing import Literal, Union
@@ -26,6 +26,12 @@ class Handle:
     def content_frame(self):
         if isinstance(self.handle, ElementHandle):
             return self.handle.content_frame()
+
+    def fill(self, selector: Union[str, None] = None, value: str = "", **kwargs):
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.fill(selector, value, **kwargs)
+
+        return self.handle.fill(value, **kwargs)
 
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None

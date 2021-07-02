@@ -1,5 +1,5 @@
-'''Implements Playwright's Browser.
-'''
+"""Implements Playwright's Browser.
+"""
 
 from playwright.sync_api import sync_playwright
 
