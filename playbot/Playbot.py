@@ -245,7 +245,6 @@ class Playbot:
         | =A=         | =B=           | =C=     | =D=       |
         | ${element}= | ElementHandle | ${page} | #id=my-id |
         | Check       | ${element}    |         |           |
-
         """
         if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
             return handle.check(selector, **kwargs)

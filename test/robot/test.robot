@@ -2,7 +2,7 @@
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
 Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 
-Suite Setup       Start Browser   headless=${TRUE}
+Suite Setup       Start Browser   headless=${FALSE}
 Suite Teardown    Close Browser
 
 ***Variables***
