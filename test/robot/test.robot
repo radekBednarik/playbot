@@ -238,3 +238,16 @@ Reload
     Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
     Reload                   ${page}                 wait_until=networkidle         timeout=${10000}
     Close Context            ${context}
+
+Bring To Front
+    [Documentation]    get it running
+    [Tags]             bring_to_front
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/             wait_until=networkidle
+    ${page2}=                New Page                ${context}
+    Go To                    ${page2}                https://www.tesena.com/en/insights     wait_until=networkidle
+    ${ret}=                  Bring To Front          ${page}
+    ${type_check}=           Is Type                 ${ret}                  None
+    Should Be True           ${type_check}==True
+    Close Context            ${context}

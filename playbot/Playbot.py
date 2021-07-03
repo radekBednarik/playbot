@@ -208,6 +208,21 @@ class Playbot:
         return page.close_page(page.page, run_before_unload=run_before_unload)
 
     @keyword
+    def bring_to_front(self, page: PlaybotPage):
+        """Brings given page to front - activates the tab.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-bring-to-front for
+        documentation.
+
+        == Example ==
+
+        | =A=            | =B=      | =C=        |
+        | ${page}=       | New Page | ${context} |
+        | Bring To Front | ${page}  |            |
+        """
+        return page.bring_to_front(page.page)
+
+    @keyword
     def check(
         self,
         handle: Union[PlaybotPage, ElementHandle, Frame],
