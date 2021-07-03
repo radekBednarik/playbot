@@ -14,8 +14,9 @@ ${FALSE}                Convert to boolean=False
 &{VP_600_800}           width=${600}     height=${800}
 
 ***Test Cases***
-Goto Tesena, Query Selector Via Page, Element
+Query Selector
     [Documentation]    get it running
+    [Tags]             query_selector
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.tesena.com/en
@@ -28,8 +29,9 @@ Goto Tesena, Query Selector Via Page, Element
     Log                       ${accept_button}
     Close Context             ${context}
 
-Go to YouTube, iHned
+Multiple Pages
     [Documentation]    get it running
+    [Tags]             multiple_pages
     ${context}=               New Context            viewport=&{VP_600_800}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.youtube.com
@@ -37,8 +39,9 @@ Go to YouTube, iHned
     Go To                     ${page_two}            https://ihned.cz
     Close Context             ${context}
 
-Wait For Selector via Page, Element
+Wait For Selector
     [Documentation]    get it running
+    [Tags]             wait_for_selector
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
@@ -52,6 +55,7 @@ Wait For Selector via Page, Element
 
 Get cookies
     [Documentation]    get it running
+    [Tags]             get_cookies
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.tesena.com
@@ -66,6 +70,7 @@ Get cookies
 
 Is Visible
     [Documentation]    get it running
+    [Tags]             is_visible
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
@@ -80,6 +85,7 @@ Is Visible
 
 Wait For Element State
     [Documentation]    get it running
+    [Tags]             wait_for_element_state
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
@@ -90,6 +96,7 @@ Wait For Element State
 
 Click
     [Documentation]    get it running
+    [Tags]             click
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     ${locator_banner}=       Convert To String       xpath=//div[@id="panel-cookies"]
@@ -103,6 +110,7 @@ Click
 
 Wait For Load State
     [Documentation]    get it running
+    [Tags]             wait_for_load_state
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en
@@ -111,6 +119,7 @@ Wait For Load State
 
 Wait For Url
     [Documentation]    get it running
+    [Tags]             wait_for_url
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     ${services_selector}=    Convert To String       //nav[@id="menu-main"]//a[contains(@href, "services")]/span
@@ -121,6 +130,7 @@ Wait For Url
 
 Query Selector All
     [Documentation]    get it running
+    [Tags]             query_selector_all
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     ${menu_sel}=             Convert To String       xpath=//ul[@id="menu-1"]
@@ -136,6 +146,7 @@ Query Selector All
 
 Close Page
     [Documentation]    get it running
+    [Tags]             close_page
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en    wait_until=domcontentloaded
@@ -144,6 +155,7 @@ Close Page
 
 Frame
     [Documentation]    get it running
+    [Tags]             frame
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://ihned.cz/    wait_until=networkidle
@@ -152,6 +164,7 @@ Frame
 
 Content Frame
     [Documentation]    get it running
+    [Tags]             content_frame
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en/insights     wait_until=networkidle
@@ -162,6 +175,7 @@ Content Frame
 
 Check
     [Documentation]    get it running
+    [Tags]             check
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
@@ -179,6 +193,7 @@ Check
 
 Fill
     [Documentation]    get it running
+    [Tags]             fill
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
@@ -196,6 +211,7 @@ Fill
 
 Screenshot
     [Documentation]    get it running
+    [Tags]             screenshot
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
@@ -212,4 +228,13 @@ Screenshot
     # Cleanup
     Remove File              ${filepath_1}
     Remove File              ${filepath_2}
+    Close Context            ${context}
+
+Reload
+    [Documentation]    get it running
+    [Tags]             reload
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
+    Reload                   ${page}                 wait_until=networkidle         timeout=${10000}
     Close Context            ${context}

@@ -32,6 +32,10 @@ class PlaybotPage(Handle):
         return page.goto(url, **kwargs)
 
     @staticmethod
+    def reload(page: Page, **kwargs):
+        return page.reload(**kwargs)
+
+    @staticmethod
     def wait_for_load_state(
         page: Page,
         state: Union[Literal["load", "domcontentloaded", "networkidle"], None] = "load",

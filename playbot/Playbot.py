@@ -513,6 +513,22 @@ class Playbot:
         return handle.query_selector_all(selector)
 
     @keyword
+    def reload(self, page: PlaybotPage, **kwargs):
+        """Reloads the page.
+
+        Can be used with *<PlaybotPage>*.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-reload for
+        documentation.
+
+        == Example ==
+
+        | =A=    | =B=     | =C=                         | =D=              |
+        | Reload | ${page} | wait_until=domcontentloaded | timeout=${10000} |
+        """
+        return page.reload(page.page, **kwargs)
+
+    @keyword
     def screenshot(self, handle: Union[PlaybotPage, ElementHandle], **kwargs):
         """Saves screenshot of the page or element.
 
