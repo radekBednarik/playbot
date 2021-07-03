@@ -208,6 +208,21 @@ class Playbot:
         return page.close_page(page.page, run_before_unload=run_before_unload)
 
     @keyword
+    def bring_to_front(self, page: PlaybotPage):
+        """Brings given page to front - activates the tab.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-bring-to-front for
+        documentation.
+
+        == Example ==
+
+        | =A=            | =B=      | =C=        |
+        | ${page}=       | New Page | ${context} |
+        | Bring To Front | ${page}  |            |
+        """
+        return page.bring_to_front(page.page)
+
+    @keyword
     def check(
         self,
         handle: Union[PlaybotPage, ElementHandle, Frame],
@@ -511,6 +526,51 @@ class Playbot:
         | @{elements}=   | Query Selector All | ${element}             | ${selector_2} |
         """
         return handle.query_selector_all(selector)
+
+    @keyword
+    def reload(self, page: PlaybotPage, **kwargs):
+        """Reloads the page.
+
+        Can be used with *<PlaybotPage>*.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-reload for
+        documentation.
+
+        == Example ==
+
+        | =A=    | =B=     | =C=                         | =D=              |
+        | Reload | ${page} | wait_until=domcontentloaded | timeout=${10000} |
+        """
+        return page.reload(page.page, **kwargs)
+
+    @keyword
+    def screenshot(self, handle: Union[PlaybotPage, ElementHandle], **kwargs):
+        """Saves screenshot of the page or element.
+
+        Can be used with *<PlaybotPage>* or *<ElementHandle>*.
+
+        Take care - some kwargs are not available for _<ElementHandle>_ variant.
+        See documentation.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-screenshot for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-screenshot for
+        element variant documentation.
+
+        == Example ==
+
+        === With Page ===
+
+        | =A=        | =B=     | =C=              | =D=                    |
+        | Screenshot | ${page} | path=path/to/file.png | full_page=${True} |
+
+        === With Element ===
+        | =A=        | =B=        | =C=                   |
+        | Screenshot | ${element} | path=path/to/file.png |
+
+        """
+        return handle.screenshot(**kwargs)
 
     @keyword
     def wait_for_element_state(
