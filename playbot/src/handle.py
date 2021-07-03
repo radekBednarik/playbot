@@ -52,6 +52,9 @@ class Handle:
     def query_selector_all(self, selector: str):
         return self.handle.query_selector_all(selector)
 
+    def screenshot(self, **kwargs):
+        return self.handle.screenshot(**kwargs)
+
     def wait_for_element_state(
         self,
         state: Literal["visible", "hidden", "enabled", "disabled", "editable"],

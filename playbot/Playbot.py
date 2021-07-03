@@ -513,6 +513,35 @@ class Playbot:
         return handle.query_selector_all(selector)
 
     @keyword
+    def screenshot(self, handle: Union[PlaybotPage, ElementHandle], **kwargs):
+        """Saves screenshot of the page or element.
+
+        Can be used with *<PlaybotPage>* or *<ElementHandle>*.
+
+        Take care - some kwargs are not available for _<ElementHandle>_ variant.
+        See documentation.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-screenshot for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-screenshot for
+        element variant documentation.
+
+        == Example ==
+
+        === With Page ===
+
+        | =A=        | =B=     | =C=              | =D=                    |
+        | Screenshot | ${page} | path=path/to/file.png | full_page=${True} |
+
+        === With Element ===
+        | =A=        | =B=        | =C=                   |
+        | Screenshot | ${element} | path=path/to/file.png |
+
+        """
+        return handle.screenshot(**kwargs)
+
+    @keyword
     def wait_for_element_state(
         self,
         handle: ElementHandle,

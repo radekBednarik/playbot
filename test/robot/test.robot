@@ -1,15 +1,17 @@
 ***Settings***
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
 Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
+Library           OperatingSystem
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
-${TRUE}             Convert to boolean=True
-${FALSE}            Convert to boolean=False
-&{VP_1920_1080}     width=${1920}    height=${1080}   
-&{VP_600_800}       width=${600}     height=${800}
+${TESTS_RESULT_DIR}=    ${EXECDIR}${/}test
+${TRUE}                 Convert to boolean=True
+${FALSE}                Convert to boolean=False
+&{VP_1920_1080}         width=${1920}    height=${1080}   
+&{VP_600_800}           width=${600}     height=${800}
 
 ***Test Cases***
 Goto Tesena, Query Selector Via Page, Element
@@ -90,7 +92,7 @@ Click
     [Documentation]    get it running
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
-    ${locator_banner}=       Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_banner}=       Convert To String       xpath=//div[@id="panel-cookies"]
     ${locator_bttn}=         Convert To String       xpath=//button[contains(@class, "btn-confirm")]
     Go To                    ${page}                 https://www.tesena.com/en
     ${bttn}=                 Wait For Selector       ${page}    ${locator_bttn}    state=visible
@@ -190,4 +192,24 @@ Fill
     ${ln_ret}=               Fill                    ${ln_element}              value=${test_phrase}
     ${type_check2}=          Is Type                 ${ln_ret}                  None
     Should Be True           ${type_check2}==True
+    Close Context            ${context}
+
+Screenshot
+    [Documentation]    get it running
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
+    ${filepath_1}=           Convert To String       ${TESTS_RESULT_DIR}${/}screenshot_1.png
+    ${filepath_2}=           Convert To String       ${TESTS_RESULT_DIR}${/}screenshot_2.png
+    # page screenshot test
+    Screenshot               ${page}                 path=${filepath_1}
+    File Should Exist        ${filepath_1}
+    # elem screenshot test
+    ${elem_loc}=             Convert To String       xpath=//button[contains(@class, "btn-confirm")]
+    ${element}=              Query Selector          ${page}                    ${elem_loc}
+    Screenshot               ${element}              path=${filepath_2}
+    File Should Exist        ${filepath_2}
+    # Cleanup
+    Remove File              ${filepath_1}
+    Remove File              ${filepath_2}
     Close Context            ${context}
