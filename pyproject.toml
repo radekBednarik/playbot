@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "playbot"
+name = "playwbot"
 version = "0.1.0"
 description = "RobotFramework wrapper of Playwright-Python"
 authors = ["radekBednarik <radek.bednarik@tesena.com>"]
@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://radekbednarik.github.io/playbot/"
 repository = "https://github.com/radekBednarik/playbot"
 documentation = "https://radekbednarik.github.io/playbot/"
-keywords = ["playwright", "playbot", "playwright-python", "test-automation", "robot-framework"]
+keywords = ["playwright", "playwbot", "playwright-python", "test-automation", "robot-framework"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
