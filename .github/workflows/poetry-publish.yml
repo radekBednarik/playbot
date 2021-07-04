@@ -34,4 +34,4 @@ jobs:
         poetry build
     - name: Publish package
       run: |
-        poetry publish -u ${{secrets.PYPI_USERNAME}} -p ${{secrets.PYPI_PASSWORD}} --dry-run
+        poetry publish -u ${{secrets.PYPI_USERNAME}} -p ${{secrets.PYPI_PASSWORD}}
