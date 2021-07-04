@@ -1,5 +1,5 @@
-'''Implements Playwright's Page.
-'''
+"""Implements Playwright's Page.
+"""
 
 from typing import Callable, Literal, Pattern, Union
 from playwright.sync_api import BrowserContext, Page
@@ -16,6 +16,10 @@ class PlaybotPage(Handle):
         return self._browser_context.new_page(**kwargs)
 
     @staticmethod
+    def bring_to_front(page: Page):
+        return page.bring_to_front()
+
+    @staticmethod
     def close_page(page: Page, run_before_unload: Union[bool, None] = None):
         return page.close(run_before_unload=run_before_unload)
 
@@ -30,6 +34,10 @@ class PlaybotPage(Handle):
     @staticmethod
     def go_to(page: Page, url: str, **kwargs):
         return page.goto(url, **kwargs)
+
+    @staticmethod
+    def reload(page: Page, **kwargs):
+        return page.reload(**kwargs)
 
     @staticmethod
     def wait_for_load_state(

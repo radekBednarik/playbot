@@ -1,27 +1,32 @@
-'''Implements Playwright's Browser.
-'''
+"""Implements Playwright's Browser.
+"""
 
 from playwright.sync_api import sync_playwright
 
 
 class PlaybotBrowser:
     def __init__(self, browser: str = "chromium", **kwargs):
+        self._playwright = self._start_playwright()
         self.browser = self._start_browser(browser, **kwargs)
+
+    @staticmethod
+    def _start_playwright():
+        return sync_playwright().start()
 
     def _start_browser(self, browser: str, **kwargs):
         if browser == "chromium":
-            return sync_playwright().start().chromium.launch(**kwargs)
+            return self._playwright.chromium.launch(**kwargs)
 
-        elif browser == "firefox":
-            return sync_playwright().start().firefox.launch(**kwargs)
+        if browser == "firefox":
+            return self._playwright.firefox.launch(**kwargs)
 
-        elif browser == "webkit":
-            return sync_playwright().start().webkit.launch(**kwargs)
+        if browser == "webkit":
+            return self._playwright.webkit.launch(**kwargs)
 
-        else:
-            raise RuntimeError(
-                "You have to select either 'chromium', 'firefox', or 'webkit' as browser."
-            )
+        raise RuntimeError(
+            "You have to select either 'chromium', 'firefox', or 'webkit' as browser."
+        )
 
     def close_browser(self):
-        return self.browser.close()
+        self.browser.close()
+        self._playwright.stop()

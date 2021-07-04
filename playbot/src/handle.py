@@ -1,5 +1,5 @@
-'''Implements methods shared by Page and ElementHandle classes.
-'''
+"""Implements methods shared by Page and ElementHandle classes.
+"""
 
 
 from typing import Literal, Union
@@ -9,6 +9,12 @@ from playwright.sync_api import Page, ElementHandle, Frame
 class Handle:
     def __init__(self, handle: Union[Page, ElementHandle, Frame]) -> None:
         self.handle: Union[Page, ElementHandle, Frame] = handle
+
+    def check(self, selector: Union[str, None] = None, **kwargs):
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.check(selector, **kwargs)
+
+        return self.handle.check(**kwargs)
 
     def click(self, selector: Union[str, None] = None, **kwargs):
         if isinstance(self.handle, (Page, Frame)) and selector is not None:
@@ -20,6 +26,12 @@ class Handle:
     def content_frame(self):
         if isinstance(self.handle, ElementHandle):
             return self.handle.content_frame()
+
+    def fill(self, selector: Union[str, None] = None, value: str = "", **kwargs):
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.fill(selector, value, **kwargs)
+
+        return self.handle.fill(value, **kwargs)
 
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
@@ -39,6 +51,9 @@ class Handle:
 
     def query_selector_all(self, selector: str):
         return self.handle.query_selector_all(selector)
+
+    def screenshot(self, **kwargs):
+        return self.handle.screenshot(**kwargs)
 
     def wait_for_element_state(
         self,

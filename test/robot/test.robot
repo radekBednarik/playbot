@@ -1,18 +1,22 @@
 ***Settings***
 Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
+Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
+Library           OperatingSystem
 
 Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
-${TRUE}             Convert to boolean=True
-${FALSE}            Convert to boolean=False
-&{VP_1920_1080}     width=${1920}    height=${1080}   
-&{VP_600_800}       width=${600}     height=${800}
+${TESTS_RESULT_DIR}=    ${EXECDIR}${/}test
+${TRUE}                 Convert to boolean=True
+${FALSE}                Convert to boolean=False
+&{VP_1920_1080}         width=${1920}    height=${1080}   
+&{VP_600_800}           width=${600}     height=${800}
 
 ***Test Cases***
-Goto Tesena, Query Selector Via Page, Element
+Query Selector
     [Documentation]    get it running
+    [Tags]             query_selector
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.tesena.com/en
@@ -25,8 +29,9 @@ Goto Tesena, Query Selector Via Page, Element
     Log                       ${accept_button}
     Close Context             ${context}
 
-Go to YouTube, iHned
+Multiple Pages
     [Documentation]    get it running
+    [Tags]             multiple_pages
     ${context}=               New Context            viewport=&{VP_600_800}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.youtube.com
@@ -34,8 +39,9 @@ Go to YouTube, iHned
     Go To                     ${page_two}            https://ihned.cz
     Close Context             ${context}
 
-Wait For Selector via Page, Element
+Wait For Selector
     [Documentation]    get it running
+    [Tags]             wait_for_selector
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
@@ -49,6 +55,7 @@ Wait For Selector via Page, Element
 
 Get cookies
     [Documentation]    get it running
+    [Tags]             get_cookies
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     Go To                     ${page}                https://www.tesena.com
@@ -63,6 +70,7 @@ Get cookies
 
 Is Visible
     [Documentation]    get it running
+    [Tags]             is_visible
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_banner}=        Convert To String      xpath=//div[@id="panel-cookies"]
@@ -77,6 +85,7 @@ Is Visible
 
 Wait For Element State
     [Documentation]    get it running
+    [Tags]             wait_for_element_state
     ${context}=               New Context            viewport=&{VP_1920_1080}
     ${page}=                  New Page               ${context}
     ${locator_bttn}=          Convert To String      xpath=//button[contains(@class, "btn-confirm")]
@@ -87,9 +96,10 @@ Wait For Element State
 
 Click
     [Documentation]    get it running
+    [Tags]             click
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
-    ${locator_banner}=       Convert To String      xpath=//div[@id="panel-cookies"]
+    ${locator_banner}=       Convert To String       xpath=//div[@id="panel-cookies"]
     ${locator_bttn}=         Convert To String       xpath=//button[contains(@class, "btn-confirm")]
     Go To                    ${page}                 https://www.tesena.com/en
     ${bttn}=                 Wait For Selector       ${page}    ${locator_bttn}    state=visible
@@ -100,6 +110,7 @@ Click
 
 Wait For Load State
     [Documentation]    get it running
+    [Tags]             wait_for_load_state
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en
@@ -108,6 +119,7 @@ Wait For Load State
 
 Wait For Url
     [Documentation]    get it running
+    [Tags]             wait_for_url
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     ${services_selector}=    Convert To String       //nav[@id="menu-main"]//a[contains(@href, "services")]/span
@@ -118,6 +130,7 @@ Wait For Url
 
 Query Selector All
     [Documentation]    get it running
+    [Tags]             query_selector_all
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     ${menu_sel}=             Convert To String       xpath=//ul[@id="menu-1"]
@@ -133,6 +146,7 @@ Query Selector All
 
 Close Page
     [Documentation]    get it running
+    [Tags]             close_page
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en    wait_until=domcontentloaded
@@ -141,6 +155,7 @@ Close Page
 
 Frame
     [Documentation]    get it running
+    [Tags]             frame
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://ihned.cz/    wait_until=networkidle
@@ -149,10 +164,90 @@ Frame
 
 Content Frame
     [Documentation]    get it running
+    [Tags]             content_frame
     ${context}=              New Context             viewport=&{VP_1920_1080}
     ${page}=                 New Page                ${context}
     Go To                    ${page}                 https://www.tesena.com/en/insights     wait_until=networkidle
     @{iframes}=              Query Selector All      ${page}                                xpath=//iframe
     Should Not Be Empty      ${iframes}
     ${frame}=                Content Frame           ${iframes}[0]
+    Close Context            ${context}
+
+Check
+    [Documentation]    get it running
+    [Tags]             check
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
+    ${checkbox_sel}=         Convert To String       //input[@type="checkbox" and contains(@aria-label, "consent")]
+    # Page and selector
+    ${ret}=                  Check                   ${page}                 ${checkbox_sel}
+    ${type_check}=           Is Type                 ${ret}                  None
+    Should Be True           ${type_check}==True
+    # element
+    ${checkbox}=             Query Selector          ${page}    ${checkbox_sel}
+    ${ret2}=                 Check                   ${checkbox}
+    ${type_check2}=          Is Type                 ${ret2}                  None
+    Should Be True           ${type_check2}==True
+    Close Context            ${context}
+
+Fill
+    [Documentation]    get it running
+    [Tags]             fill
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
+    ${first_name_sel}=       Convert To String       xpath=//input[@name="First Name"]
+    ${last_name_sel}=        Convert To String       xpath=//input[@name="Last Name"]
+    ${test_phrase}=          Convert To String       this is a test
+    ${fn_ret}=               Fill                    ${page}                    ${first_name_sel}    value=${test_phrase}
+    ${type_check1}=          Is Type                 ${fn_ret}                  None
+    Should Be True           ${type_check1}==True
+    ${ln_element}=           Query Selector          ${page}                    ${last_name_sel}
+    ${ln_ret}=               Fill                    ${ln_element}              value=${test_phrase}
+    ${type_check2}=          Is Type                 ${ln_ret}                  None
+    Should Be True           ${type_check2}==True
+    Close Context            ${context}
+
+Screenshot
+    [Documentation]    get it running
+    [Tags]             screenshot
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
+    ${filepath_1}=           Convert To String       ${TESTS_RESULT_DIR}${/}screenshot_1.png
+    ${filepath_2}=           Convert To String       ${TESTS_RESULT_DIR}${/}screenshot_2.png
+    # page screenshot test
+    Screenshot               ${page}                 path=${filepath_1}
+    File Should Exist        ${filepath_1}
+    # elem screenshot test
+    ${elem_loc}=             Convert To String       xpath=//button[contains(@class, "btn-confirm")]
+    ${element}=              Query Selector          ${page}                    ${elem_loc}
+    Screenshot               ${element}              path=${filepath_2}
+    File Should Exist        ${filepath_2}
+    # Cleanup
+    Remove File              ${filepath_1}
+    Remove File              ${filepath_2}
+    Close Context            ${context}
+
+Reload
+    [Documentation]    get it running
+    [Tags]             reload
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/     wait_until=networkidle
+    Reload                   ${page}                 wait_until=networkidle         timeout=${10000}
+    Close Context            ${context}
+
+Bring To Front
+    [Documentation]    get it running
+    [Tags]             bring_to_front
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/             wait_until=networkidle
+    ${page2}=                New Page                ${context}
+    Go To                    ${page2}                https://www.tesena.com/en/insights     wait_until=networkidle
+    ${ret}=                  Bring To Front          ${page}
+    ${type_check}=           Is Type                 ${ret}                  None
+    Should Be True           ${type_check}==True
     Close Context            ${context}
