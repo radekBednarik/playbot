@@ -1,5 +1,5 @@
 ***Settings***
-Library           ${EXECDIR}${/}playbot${/}Playbot.py    browser=chromium
+Library           ${EXECDIR}${/}playwbot${/}Playwbot.py    browser=chromium
 Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 

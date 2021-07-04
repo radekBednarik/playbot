@@ -1,1 +1,1 @@
-libdoc -f html playbot\Playbot.py docs\index.html
+libdoc -f html playwbot\Playwbot.py docs\index.html

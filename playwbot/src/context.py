@@ -6,7 +6,7 @@ from typing import Union
 from playwright.sync_api import Browser, BrowserContext
 
 
-class PlaybotContext:
+class PlaywbotContext:
     def __init__(self, browser_type_instance: Browser, **kwargs):
         self._browser_type_instance = browser_type_instance
         self.context = self._start_context(**kwargs)

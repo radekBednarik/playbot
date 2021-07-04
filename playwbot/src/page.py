@@ -3,10 +3,10 @@
 
 from typing import Callable, Literal, Pattern, Union
 from playwright.sync_api import BrowserContext, Page
-from playbot.src.handle import Handle
+from playwbot.src.handle import Handle
 
 
-class PlaybotPage(Handle):
+class PlaywbotPage(Handle):
     def __init__(self, browser_context: BrowserContext, **kwargs):
         self._browser_context: BrowserContext = browser_context
         self.page = self._start_page(**kwargs)

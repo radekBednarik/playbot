@@ -4,7 +4,7 @@
 from playwright.sync_api import sync_playwright
 
 
-class PlaybotBrowser:
+class PlaywbotBrowser:
     def __init__(self, browser: str = "chromium", **kwargs):
         self._playwright = self._start_playwright()
         self.browser = self._start_browser(browser, **kwargs)

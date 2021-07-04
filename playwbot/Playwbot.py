@@ -1,6 +1,6 @@
 # pylint: disable=invalid-name, line-too-long, no-self-use
 
-"""Playbot provides very basic operations/keywords
+"""Playbot provides operations/keywords
 by playwright/python library to the robotframework.
 """
 
@@ -9,13 +9,13 @@ from typing import Callable, Literal, Pattern, Union
 from playwright.sync_api import Browser, ElementHandle, Frame
 from robot.api.deco import keyword, library
 
-from playbot.src.browser import PlaybotBrowser
-from playbot.src.context import PlaybotContext
-from playbot.src.page import PlaybotPage
+from playwbot.src.browser import PlaywbotBrowser
+from playwbot.src.context import PlaywbotContext
+from playwbot.src.page import PlaywbotPage
 
 
 @library
-class Playbot:
+class Playwbot:
     """Represents the library for robot framework.
 
     This library wraps selected methods of https://playwright.dev/python/
@@ -34,9 +34,17 @@ class Playbot:
 
         == Example ==
 
-        |       =A=      |               =B=                   |              =C=                  |
-        | ***Settings*** |                                     |                                   |
-        | Library        | ${EXECDIR}${/}playbot${/}Playbot.py | browser=<chromium|firefox|webkit> |
+        === Importing library file directly ===
+
+        |       =A=      |               =B=                   |              =C=                    |
+        | ***Settings*** |                                     |                                     |
+        | Library        | ${EXECDIR}${/}playwbot${/}Playwbot.py | browser=<chromium|firefox|webkit> |
+
+        === Importing installed library ===
+
+        |       =A=      |               =B=                   |              =C=                    |
+        | ***Settings*** |                                     |                                     |
+        | Library        | playwbot.Playwbot                   | browser=<chromium|firefox|webkit>   |
         """
         self._selected_browser: str = browser
         self._playbot_browser: Union[None, Browser] = None
@@ -60,7 +68,7 @@ class Playbot:
         | Suite Setup    | Start Browser |                   |
         | Suite Setup    | Start Browser | headless=${False} |
         """
-        self._playbot_browser = PlaybotBrowser(self._selected_browser, **kwargs)
+        self._playbot_browser = PlaywbotBrowser(self._selected_browser, **kwargs)
 
     @keyword
     def close_browser(self):
@@ -88,7 +96,7 @@ class Playbot:
         See https://playwright.dev/python/docs/api/class-browser#browser-new-context for
         all available options.
 
-        This keyword returns *PlaybotContext* class instance, which contains _context_
+        This keyword returns *PlaywbotContext* class instance, which contains _context_
         property with created browser context.
 
         == Example ==
@@ -114,12 +122,12 @@ class Playbot:
         | ${context1}=  | New Context   | viewport=&{viewport} |
         | ${context2}=  | New Context   |                      |
         """
-        return PlaybotContext(self._playbot_browser.browser, **kwargs)
+        return PlaywbotContext(self._playbot_browser.browser, **kwargs)
 
     @keyword
-    def close_context(self, context: PlaybotContext):
+    def close_context(self, context: PlaywbotContext):
         """Closes given browser context, which is represented by
-        wrapper class *PlaybotContext*.
+        wrapper class *PlaywbotContext*.
 
         See https://playwright.dev/python/docs/api/class-browsercontext#browser-context-close for
         the command documentation.
@@ -133,7 +141,7 @@ class Playbot:
 
     @keyword
     def cookies(
-        self, context: PlaybotContext, urls: Union[str, list[str], None] = None
+        self, context: PlaywbotContext, urls: Union[str, list[str], None] = None
     ):
         """Returns list of cookies of the given browser context.
 
@@ -161,9 +169,9 @@ class Playbot:
         return context.cookies(context.context, urls)
 
     @keyword
-    def new_page(self, context: PlaybotContext, **kwargs):
+    def new_page(self, context: PlaywbotContext, **kwargs):
         """Opens new page and returns its instance.
-        It is represented by wrapper class *PlaybotPage*, which
+        It is represented by wrapper class *PlaywbotPage*, which
         contains property _page_, which represents browser context's
         page.
 
@@ -187,11 +195,11 @@ class Playbot:
         | ${page1}=   | New Page    | ${context} |
         | ${page2}=   | New Page    | ${context} |
         """
-        return PlaybotPage(context.context, **kwargs)
+        return PlaywbotPage(context.context, **kwargs)
 
     @keyword
     def close_page(
-        self, page: PlaybotPage, run_before_unload: Union[bool, None] = None
+        self, page: PlaywbotPage, run_before_unload: Union[bool, None] = None
     ):
         """Closes the given page.
 
@@ -208,7 +216,7 @@ class Playbot:
         return page.close_page(page.page, run_before_unload=run_before_unload)
 
     @keyword
-    def bring_to_front(self, page: PlaybotPage):
+    def bring_to_front(self, page: PlaywbotPage):
         """Brings given page to front - activates the tab.
 
         See https://playwright.dev/python/docs/api/class-page/#page-bring-to-front for
@@ -225,13 +233,13 @@ class Playbot:
     @keyword
     def check(
         self,
-        handle: Union[PlaybotPage, ElementHandle, Frame],
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         **kwargs
     ):
         """Checks an element.
 
-        This keyword is usable with *<PlaybotPage>*, *<ElementHandle>* and *<Frame>*.
+        This keyword is usable with *<PlaywbotPage>*, *<ElementHandle>* and *<Frame>*.
 
         See https://playwright.dev/python/docs/api/class-page#page-check for
         page variant documentation.
@@ -261,7 +269,7 @@ class Playbot:
         | ${element}= | ElementHandle | ${page} | #id=my-id |
         | Check       | ${element}    |         |           |
         """
-        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.check(selector, **kwargs)
 
         return handle.check(**kwargs)
@@ -269,13 +277,13 @@ class Playbot:
     @keyword
     def click(
         self,
-        handle: Union[PlaybotPage, ElementHandle, Frame],
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         **kwargs
     ):
         """Click element.
 
-        This keyword can be used either with *<PlaybotPage>*, *<Frame>* or with *<ElementHandle>*.
+        This keyword can be used either with *<PlaywbotPage>*, *<Frame>* or with *<ElementHandle>*.
 
         See https://playwright.dev/python/docs/api/class-page#page-click for
         click with page.
@@ -311,7 +319,7 @@ class Playbot:
         | ${in_frame_selector}= | Convert To String | xpath=//some-selector |                |
         | Click                 | ${frame}          | ${in_frame_selector}  |                |
         """
-        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.click(selector=selector, **kwargs)
         return handle.click(**kwargs)
 
@@ -338,14 +346,14 @@ class Playbot:
     @keyword
     def fill(
         self,
-        handle: Union[PlaybotPage, ElementHandle, Frame],
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         value: str = "",
         **kwargs
     ):
         """Fills an element.
 
-        This keyword is usable with *<PlaybotPage>*, *<ElementHandle>* and *<Frame>*.
+        This keyword is usable with *<PlaywbotPage>*, *<ElementHandle>* and *<Frame>*.
 
         See https://playwright.dev/python/docs/api/class-page#page-fill for
         page variant documentation.
@@ -373,7 +381,7 @@ class Playbot:
         | =A=  | =B=        | =C=                        |
         | Fill | ${element} | some value to be filled in |
         """
-        if isinstance(handle, (PlaybotPage, Frame)) and selector is not None:
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.fill(selector, value, **kwargs)
 
         return handle.fill(value, **kwargs)
@@ -381,7 +389,7 @@ class Playbot:
     @keyword
     def frame(
         self,
-        page: PlaybotPage,
+        page: PlaywbotPage,
         name: Union[str, None] = None,
         url: Union[str, Pattern, Callable, None] = None,
     ):
@@ -405,7 +413,7 @@ class Playbot:
         return page.frame(page.page, name=name, url=url)
 
     @keyword
-    def go_to(self, page: PlaybotPage, url: str, **kwargs):
+    def go_to(self, page: PlaywbotPage, url: str, **kwargs):
         """Navigates to given url. Returns the response of the last redirect.
 
         See https://playwright.dev/python/docs/api/class-page#page-goto for
@@ -423,13 +431,13 @@ class Playbot:
     @keyword
     def is_visible(
         self,
-        handle: Union[PlaybotPage, ElementHandle],
+        handle: Union[PlaywbotPage, ElementHandle],
         selector: Union[str, None] = None,
         timeout: Union[float, None] = None,
     ):
         """Predicate. Verifies, whether element is visible.
 
-        Can be used with *PlaybotPage* or *ElementHandle*.
+        Can be used with *PlaywbotPage* or *ElementHandle*.
 
         See https://playwright.dev/python/docs/api/class-page#page-is-visible for
         page variant documentation.
@@ -456,15 +464,15 @@ class Playbot:
         | ${status}=     | Is Visible        | ${element}           |             |
         | Should Be True | ${status}==True   |                      |             |
         """
-        if isinstance(handle, PlaybotPage):
+        if isinstance(handle, PlaywbotPage):
             return handle.is_visible(selector=selector, timeout=timeout)
         return handle.is_visible()
 
     @keyword
-    def query_selector(self, handle: Union[PlaybotPage, ElementHandle], selector: str):
+    def query_selector(self, handle: Union[PlaywbotPage, ElementHandle], selector: str):
         """Finds and returns element that matches the given selector. If no element is found, returns _None_.
 
-        Can be used with *PlaybotPage* or *ElementHandle*.
+        Can be used with *PlaywbotPage* or *ElementHandle*.
 
         See https://playwright.dev/python/docs/api/class-page/#page-query-selector for
         page variant documentation.
@@ -494,12 +502,12 @@ class Playbot:
 
     @keyword
     def query_selector_all(
-        self, handle: Union[PlaybotPage, ElementHandle], selector: str
+        self, handle: Union[PlaywbotPage, ElementHandle], selector: str
     ):
         """Finds all elements matching given selector and returns them in _list_. If no
         elements are found, returns an empty _list_.
 
-        This keyword can be used with *PlaybotPage* or *ElementHandle*.
+        This keyword can be used with *PlaywbotPage* or *ElementHandle*.
 
         See https://playwright.dev/python/docs/api/class-page#page-query-selector-all for
         page variant documentation.
@@ -528,10 +536,10 @@ class Playbot:
         return handle.query_selector_all(selector)
 
     @keyword
-    def reload(self, page: PlaybotPage, **kwargs):
+    def reload(self, page: PlaywbotPage, **kwargs):
         """Reloads the page.
 
-        Can be used with *<PlaybotPage>*.
+        Can be used with *<PlaywbotPage>*.
 
         See https://playwright.dev/python/docs/api/class-page/#page-reload for
         documentation.
@@ -544,10 +552,10 @@ class Playbot:
         return page.reload(page.page, **kwargs)
 
     @keyword
-    def screenshot(self, handle: Union[PlaybotPage, ElementHandle], **kwargs):
+    def screenshot(self, handle: Union[PlaywbotPage, ElementHandle], **kwargs):
         """Saves screenshot of the page or element.
 
-        Can be used with *<PlaybotPage>* or *<ElementHandle>*.
+        Can be used with *<PlaywbotPage>* or *<ElementHandle>*.
 
         Take care - some kwargs are not available for _<ElementHandle>_ variant.
         See documentation.
@@ -600,7 +608,7 @@ class Playbot:
     @keyword
     def wait_for_load_state(
         self,
-        page: PlaybotPage,
+        page: PlaywbotPage,
         state: Union[Literal["load", "domcontentloaded", "networkidle"], None] = "load",
         timeout: Union[float, None] = None,
     ):
@@ -622,14 +630,14 @@ class Playbot:
 
     @keyword
     def wait_for_selector(
-        self, handle: Union[PlaybotPage, ElementHandle], selector: str, **kwargs
+        self, handle: Union[PlaywbotPage, ElementHandle], selector: str, **kwargs
     ):
         """Returns element, if matches the given selector and if satisfies the state option (in **kwargs).
         Default options for state is _visible_.
 
         If the element is not returned withing given timeout, the keyword will throw.
 
-        This keyword can be used with *PlaybotPage* or *ElementHandle*.
+        This keyword can be used with *PlaywbotPage* or *ElementHandle*.
 
         See https://playwright.dev/python/docs/api/class-page/#page-wait-for-selector for
         page variant documentation.
@@ -659,7 +667,7 @@ class Playbot:
         return handle.wait_for_selector(selector, **kwargs)
 
     @keyword
-    def wait_for_timeout(self, page: PlaybotPage, timeout: float):
+    def wait_for_timeout(self, page: PlaywbotPage, timeout: float):
         """Waits for given timeout provided in miliseconds.
 
         See https://playwright.dev/python/docs/api/class-page/#page-wait-for-timeout for
@@ -675,7 +683,7 @@ class Playbot:
 
     @keyword
     def wait_for_url(
-        self, page: PlaybotPage, url: Union[str, Pattern, Callable], **kwargs
+        self, page: PlaywbotPage, url: Union[str, Pattern, Callable], **kwargs
     ):
         """Waits until the navigation to the given _url_ is completed.
 

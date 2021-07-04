@@ -5,9 +5,9 @@ description = "RobotFramework wrapper of Playwright-Python"
 authors = ["radekBednarik <radek.bednarik@tesena.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://radekbednarik.github.io/playbot/"
-repository = "https://github.com/radekBednarik/playbot"
-documentation = "https://radekbednarik.github.io/playbot/"
+homepage = "https://radekbednarik.github.io/playwbot/"
+repository = "https://github.com/radekBednarik/playwbot"
+documentation = "https://radekbednarik.github.io/playwbot/"
 keywords = ["playwright", "playwbot", "playwright-python", "test-automation", "robot-framework"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -24,7 +24,7 @@ classifiers = [
     "Topic :: Education :: Testing"
 ]
 packages = [
-    { include = "playbot" }
+    { include = "playwbot" }
 ]
 
 [tool.poetry.dependencies]

@@ -1,3 +1,3 @@
 from setuptools import find_packages, setup
 
-setup(name="playbot", version="0.1.0", packages=find_packages())
+setup(name="playwbot", version="0.1.0", packages=find_packages())
