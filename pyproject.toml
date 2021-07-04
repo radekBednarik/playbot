@@ -24,7 +24,7 @@ classifiers = [
     "Topic :: Education :: Testing"
 ]
 packages = [
-    { include = "src/**/*.py" }
+    { include = "playbot" }
 ]
 
 [tool.poetry.dependencies]
