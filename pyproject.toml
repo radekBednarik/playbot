@@ -4,6 +4,28 @@ version = "0.1.0"
 description = "RobotFramework wrapper of Playwright-Python"
 authors = ["radekBednarik <radek.bednarik@tesena.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://radekbednarik.github.io/playbot/"
+repository = "https://github.com/radekBednarik/playbot"
+documentation = "https://radekbednarik.github.io/playbot/"
+keywords = ["playwright", "playbot", "playwright-python", "test-automation", "robot-framework"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Environment :: Web Environment",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Framework :: Robot Framework",
+    "Framework :: Robot Framework :: Library",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Education :: Testing"
+]
+packages = [
+    { include = "src/**/*.py" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
