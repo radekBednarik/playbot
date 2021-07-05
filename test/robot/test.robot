@@ -2,6 +2,7 @@
 Library           ${EXECDIR}${/}playwbot${/}Playwbot.py    browser=chromium
 Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
+Library           String
 
 Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
@@ -251,3 +252,17 @@ Bring To Front
     ${type_check}=           Is Type                 ${ret}                  None
     Should Be True           ${type_check}==True
     Close Context            ${context}
+
+Title
+    [Documentation]    get it running
+    [Tags]             title
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/insights     wait_until=networkidle
+    ${page_title}=           Title                   ${page}
+    Should Be String         ${page_title}
+    ${iframe_element}=       Query Selector          ${page}                                //iframe
+    ${frame}=                Content Frame           ${iframe_element}
+    ${frame_title}=          Title                   ${frame}
+    Should Be String         ${frame_title}
+    Close Context            ${context}    
