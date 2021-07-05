@@ -581,6 +581,37 @@ class Playwbot:
         return handle.screenshot(**kwargs)
 
     @keyword
+    def title(self, handle: Union[PlaywbotPage, Frame]):
+        """Returns the title of the page or frame.
+
+        Can be used with *<PlaywbotPage>* or *<Frame>*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-title for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-title for
+        frame variant documentation.
+
+        == Example ==
+
+        === With Page ===
+
+        | =A=       | =B=      | =C=        |
+        | ${page}=  | New Page | ${context} |
+        | ${title}= | Title    | ${page}    |
+
+        === With Frame ===
+
+        | =A=       | =B=   | =C=             |
+        | ${frame}= | Frame | name=frame_name |
+        | ${title}= | Title | ${frame}        |
+        """
+        if isinstance(handle, PlaywbotPage):
+            return handle.page.title()
+
+        return handle.title()
+
+    @keyword
     def wait_for_element_state(
         self,
         handle: ElementHandle,

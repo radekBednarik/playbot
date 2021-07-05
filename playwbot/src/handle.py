@@ -1,4 +1,4 @@
-"""Implements methods shared by Page and ElementHandle classes.
+"""Implements methods shared by Page, or Frame and ElementHandle classes.
 """
 
 
@@ -54,6 +54,10 @@ class Handle:
 
     def screenshot(self, **kwargs):
         return self.handle.screenshot(**kwargs)
+
+    def title(self):
+        if isinstance(self.handle, (Page, Frame)):
+            return self.handle.title()
 
     def wait_for_element_state(
         self,
