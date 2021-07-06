@@ -265,4 +265,18 @@ Title
     ${frame}=                Content Frame           ${iframe_element}
     ${frame_title}=          Title                   ${frame}
     Should Be String         ${frame_title}
-    Close Context            ${context}    
+    Close Context            ${context}
+
+Evaluate
+    [Documentation]    get it running
+    [Tags]             evaluate
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/insights     wait_until=networkidle
+    ${page_title}=           Playwbot.Evaluate                ${page}                                document.title
+    Should Be String         ${page_title}
+    ${iframe_element}=       Query Selector          ${page}                                //iframe
+    ${frame}=                Content Frame           ${iframe_element}
+    ${frame_title}=          Playwbot.Evaluate                ${frame}                               document.title
+    Should Be String         ${frame_title}
+    Close Context            ${context}
