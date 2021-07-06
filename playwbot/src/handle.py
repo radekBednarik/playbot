@@ -2,7 +2,7 @@
 """
 
 
-from typing import Literal, Union
+from typing import Any, Literal, Union
 from playwright.sync_api import Page, ElementHandle, Frame
 
 
@@ -26,6 +26,9 @@ class Handle:
     def content_frame(self):
         if isinstance(self.handle, ElementHandle):
             return self.handle.content_frame()
+
+    def evaluate(self, expression: str, arg: Union[Any, None] = None):
+        return self.handle.evaluate(expression, arg)
 
     def fill(self, selector: Union[str, None] = None, value: str = "", **kwargs):
         if isinstance(self.handle, (Page, Frame)) and selector is not None:

@@ -4,7 +4,7 @@
 by playwright/python library to the robotframework.
 """
 
-from typing import Callable, Literal, Pattern, Union
+from typing import Any, Callable, Literal, Pattern, Union
 
 from playwright.sync_api import Browser, ElementHandle, Frame
 from robot.api.deco import keyword, library
@@ -342,6 +342,39 @@ class Playwbot:
         | ${frame}=          | Content Frame     | ${iframe_element}     |                   |
         """
         return handle.content_frame()
+
+    @keyword
+    def evaluate(
+        self,
+        handle: Union[PlaywbotPage, Frame],
+        expression: str,
+        arg: Union[Any, None] = None,
+    ):
+        """Evaluates the provided JavaScript expression in the browser context.
+        Returns the result of the expression.
+
+        Can be used with *<PlaywbotPage>* or *<Frame>*.
+
+        See https://playwright.dev/python/docs/api/class-page#page-evaluate for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-evaluate for
+        frame variant documentation.
+
+        == Example ==
+
+        === Evaluate expression in page context ===
+
+        | =A=       | =B=      | =C=     | =D=             |
+        | ${title}= | Evaluate | ${page} | document.title  |
+
+        === Evaluate expression in frame context ===
+        | =A=       | =B=      | =C=      | =D=            |
+        | ${title}= | Evaluate | ${frame} | document.title |
+        """
+        if isinstance(handle, PlaywbotPage):
+            return handle.evaluate(expression, arg=arg)
+        return handle.evaluate(expression, arg=arg)
 
     @keyword
     def fill(
