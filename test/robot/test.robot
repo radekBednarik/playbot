@@ -4,7 +4,7 @@ Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 Library           String
 
-Suite Setup       Start Browser   headless=${TRUE}
+Suite Setup       Start Browser   headless=${FALSE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -280,3 +280,23 @@ Evaluate
     ${frame_title}=          Playwbot.Evaluate                ${frame}                               document.title
     Should Be String         ${frame_title}
     Close Context            ${context}
+
+Expect Request
+    [Documentation]    get it running
+    [Tags]             expect_request
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    ${visit_homepage}=       Set Variable            Visit Homepage${SPACE*4}${page}${SPACE*4}https://www.tesena.com/en
+    ${pattern}=              Convert To String       https://www.google-analytics.com/analytics.js
+    ${request}=              Expect Request          ${page}                 ${pattern}    ${visit_homepage}    timeout=${5000}
+    ${type_check}=           Is Type                 ${request}              request
+    Should Be True           ${type_check}==True
+    Close Context            ${context}
+
+
+***Keywords***
+Visit Homepage
+    [Documentation]   abstraction to Go To to Homepage
+    ...               to be used as argument for Expect Request
+    [Arguments]       ${page}    ${url}
+    Run Keyword And Return    Go To             ${page}    ${url}    

@@ -377,6 +377,17 @@ class Playwbot:
         return handle.evaluate(expression, arg=arg)
 
     @keyword
+    def expect_request(
+        self,
+        page: PlaywbotPage,
+        url_or_predicate: Union[str, Pattern, Callable],
+        func: Callable,
+        **kwargs
+    ):
+        """"""
+        return page.expect_request(page.page, url_or_predicate, func, **kwargs)
+
+    @keyword
     def fill(
         self,
         handle: Union[PlaywbotPage, ElementHandle, Frame],

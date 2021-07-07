@@ -3,6 +3,7 @@
 
 from typing import Any, Literal
 from robot.api.deco import library, keyword
+from playwright.sync_api import Request
 
 
 @library(scope="GLOBAL")
@@ -50,5 +51,7 @@ class TestUtils:
             return isinstance(obj, set)
         if type_ == "frozenset":
             return isinstance(obj, frozenset)
+        if type_ == "request":
+            return isinstance(obj, Request)
 
         raise Exception("Invalid type")

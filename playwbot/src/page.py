@@ -2,7 +2,7 @@
 """
 
 from typing import Callable, Literal, Pattern, Union
-from playwright.sync_api import BrowserContext, Page
+from playwright.sync_api import BrowserContext, Page, Request
 from playwbot.src.handle import Handle
 
 
@@ -22,6 +22,18 @@ class PlaywbotPage(Handle):
     @staticmethod
     def close_page(page: Page, run_before_unload: Union[bool, None] = None):
         return page.close(run_before_unload=run_before_unload)
+
+    @staticmethod
+    def expect_request(
+        page: Page,
+        url_or_predicate: Union[str, Pattern, Callable],
+        func: Callable,
+        **kwargs
+    ):
+        """ """
+        with page.expect_request(url_or_predicate, **kwargs) as request_manager:
+            func()
+        return request_manager.value
 
     @staticmethod
     def frame(
