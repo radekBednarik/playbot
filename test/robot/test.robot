@@ -4,7 +4,7 @@ Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 Library           String
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -284,19 +284,14 @@ Evaluate
 Expect Request
     [Documentation]    get it running
     [Tags]             expect_request
-    ${context}=              New Context             viewport=&{VP_1920_1080}
-    ${page}=                 New Page                ${context}
-    ${visit_homepage}=       Set Variable            Visit Homepage${SPACE*4}${page}${SPACE*4}https://www.tesena.com/en
-    ${pattern}=              Convert To String       https://www.google-analytics.com/analytics.js
-    ${request}=              Expect Request          ${page}                 ${pattern}    ${visit_homepage}    timeout=${5000}
-    ${type_check}=           Is Type                 ${request}              request
-    Should Be True           ${type_check}==True
+    ${context}=              New Context                           viewport=&{VP_1920_1080}
+    ${page}=                 New Page                              ${context}
+    ${request_url}=          Convert To String                     https://www.tesena.com/files/logo-tesena.svg
+    @{args}=                 Create List                           https://www.tesena.com/en
+    &{kwargs}=               Create Dictionary                     wait_until=networkidle    timeout=${10000}
+    @{action_args}=          Create List                           ${args}                   ${kwargs}
+    ${request}=              Expect Request          ${page}       ${request_url}
+    ...                                              go to         action_args=${action_args}
+    ${check}=                Is Type                 ${request}    request
+    Should Be True           ${check}==True
     Close Context            ${context}
-
-
-***Keywords***
-Visit Homepage
-    [Documentation]   abstraction to Go To to Homepage
-    ...               to be used as argument for Expect Request
-    [Arguments]       ${page}    ${url}
-    Run Keyword And Return    Go To             ${page}    ${url}    
