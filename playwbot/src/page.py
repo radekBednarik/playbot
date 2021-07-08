@@ -1,7 +1,7 @@
 """Implements Playwright's Page.
 """
 
-from typing import Callable, Literal, Pattern, Union
+from typing import Any, Callable, Literal, Pattern, Union
 from playwright.sync_api import BrowserContext, Page
 from playwbot.src.handle import Handle
 
@@ -22,6 +22,52 @@ class PlaywbotPage(Handle):
     @staticmethod
     def close_page(page: Page, run_before_unload: Union[bool, None] = None):
         return page.close(run_before_unload=run_before_unload)
+
+    @staticmethod
+    def expect_request(
+        page: Page,
+        url_or_predicate: Union[str, Pattern, Callable],
+        action: str,
+        action_args: Union[list[dict[str, Any]], None] = None,
+        **kwargs
+    ):
+        """This one is a bit tricky.
+        Robot Framework does not allow to pass Keywords (which are essentially
+        <Callable> types) as arguments to other Keywords.
+        Thus, we have to specify needed action, which triggers awaited request by name
+        and provid arguments for that action in list, if needed.
+
+        Supported actions are so far:
+            - page.goto() -> "go to"
+
+        Action arguments to be passed as list. This list will contain one <list> for `args` to unpack
+        and one <dict> for `kwargs` to unpack.
+
+        See test file in `test/robot/test.robot` for Expect Request keyword for concrete example how
+        to implement this in RF syntax.
+
+        Args:
+            page (Page): context page instance
+            url_or_predicate (Union[str, Pattern, Callable]): url or predicate to be checked against
+            action (str): action which triggers awaited request
+            action_args (Union[list[dict[str, Any]], None], optional): args for action. Defaults to None.
+
+        Returns:
+            [playwright.sync_api.Request]: Request object
+        """
+        if action_args:
+            args_: list[Any] = []
+            kwargs_: dict[str, Any] = {}
+            for item in action_args:
+                if isinstance(item, list):
+                    args_ = item
+                else:
+                    kwargs_ = item
+
+        with page.expect_request(url_or_predicate, **kwargs) as request_manager:
+            if action == "go to":
+                page.goto(*args_, **kwargs_)
+        return request_manager.value
 
     @staticmethod
     def frame(

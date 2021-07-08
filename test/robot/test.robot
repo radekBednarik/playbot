@@ -280,3 +280,18 @@ Evaluate
     ${frame_title}=          Playwbot.Evaluate                ${frame}                               document.title
     Should Be String         ${frame_title}
     Close Context            ${context}
+
+Expect Request
+    [Documentation]    get it running
+    [Tags]             expect_request
+    ${context}=              New Context                           viewport=&{VP_1920_1080}
+    ${page}=                 New Page                              ${context}
+    ${request_url}=          Convert To String                     https://www.tesena.com/files/logo-tesena.svg
+    @{args}=                 Create List                           https://www.tesena.com/en
+    &{kwargs}=               Create Dictionary                     wait_until=networkidle    timeout=${10000}
+    @{action_args}=          Create List                           ${args}                   ${kwargs}
+    ${request}=              Expect Request          ${page}       ${request_url}
+    ...                                              go to         action_args=${action_args}
+    ${check}=                Is Type                 ${request}    request
+    Should Be True           ${check}==True
+    Close Context            ${context}

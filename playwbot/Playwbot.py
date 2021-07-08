@@ -377,6 +377,51 @@ class Playwbot:
         return handle.evaluate(expression, arg=arg)
 
     @keyword
+    def expect_request(
+        self,
+        page: PlaywbotPage,
+        url_or_predicate: Union[str, Pattern, Callable],
+        action: str,
+        action_args: Union[list[dict[str, Any]], None] = None,
+        **kwargs
+    ):
+        """Waits for the request and returns the object of the request.
+
+        See https://playwright.dev/python/docs/api/class-page/#page-wait-for-request for
+        documentation.
+
+        Since RobotFramework does not support passing keywords as arguments
+        to other keywords (essentialy that is passing a <Callable> type as an argument),
+        we are doing a bit of trick.
+
+        You have to specify the action, which triggers the awaited request, by assigned name.
+
+        Currently, supported actions are:
+
+        - Go To -> "go to"
+
+        You have to also specify, if needed, `action_args` keyword argument options, which may contain:
+
+        - <list> of args to be unpacked for *args
+        - <dict> of kwargs to be unpacked for **kwargs
+
+        == Example ==
+
+        | =A=             | =B=               | =C=                      | =D=                        |
+        | ${context}=     | New Context       |                          |                            |
+        | ${page}=        | New Page          | ${context}               |                            |
+        | ${request_url}= | Convert To String | some_request_url         |                            |
+        | @{args}=        | Create List       | https://url/to/visit.com |                            |
+        | &{kwargs}=      | Create Dictionary | wait_until=networkidle   | timeout=${10000}           |
+        | @{action_args}= | Create List       | ${args}                  | ${kwargs}                  |
+        | ${request}=     | Expect Request    | ${page}                  | ${request_url}             |
+        | ...             |                   | go to                    | action_args=${action_args} |
+        """
+        return page.expect_request(
+            page.page, url_or_predicate, action, action_args=action_args, **kwargs
+        )
+
+    @keyword
     def fill(
         self,
         handle: Union[PlaywbotPage, ElementHandle, Frame],
