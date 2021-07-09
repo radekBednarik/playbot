@@ -295,3 +295,18 @@ Expect Request
     ${check}=                Is Type                 ${request}    request
     Should Be True           ${check}==True
     Close Context            ${context}
+
+Expect Event
+    [Documentation]    get it running
+    [Tags]             expect_event
+    ${context}=              New Context                           viewport=&{VP_1920_1080}
+    ${page}=                 New Page                              ${context}
+    @{args}=                 Create List                           https://www.tesena.com/en
+    &{kwargs}=               Create Dictionary                     wait_until=networkidle    timeout=${10000}
+    @{action_args}=          Create List                           ${args}                   ${kwargs}
+    ${request}=              Expect Event            ${page}       request
+    ...                                              go to         action_args=${action_args}
+    ...                                              timeout=${5000}
+    ${check}=                Is Type                 ${request}    request
+    Should Be True           ${check}==True
+    Close Context            ${context}

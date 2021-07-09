@@ -235,7 +235,7 @@ class Playwbot:
         self,
         handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
-        **kwargs
+        **kwargs,
     ):
         """Checks an element.
 
@@ -279,7 +279,7 @@ class Playwbot:
         self,
         handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
-        **kwargs
+        **kwargs,
     ):
         """Click element.
 
@@ -377,13 +377,56 @@ class Playwbot:
         return handle.evaluate(expression, arg=arg)
 
     @keyword
+    def expect_event(
+        self,
+        page: PlaywbotPage,
+        event: str,
+        action: str,
+        action_args: Union[list[dict[str, Any]], None] = None,
+        **kwargs,
+    ):
+        """Waits for given `event` to fire. Returns object representing the event.
+
+        See https://playwright.dev/python/docs/api/class-page#page-wait-for-event for
+        documentation.
+
+        NOTICE: You cannot provide `predicate` kwarg for this keyword, as it is possible in the
+        playwright python library. This argument expects <Callable> type and to my knowledge,
+        there is no (easy) way to do that in RF.
+
+        Supported events are all those, that are available for playwrights `page.on()` method.
+
+        The logic of this keyword is the same, as in the case of `Expect Request` keyword.
+
+        Currently, supported actions for this keyword are:
+        - Go To -> "go to"
+
+         == Example ==
+
+        | =A=             | =B=               | =C=                      | =D=                        |
+        | ${context}=     | New Context       |                          |                            |
+        | ${page}=        | New Page          | ${context}               |                            |
+        | ${request_url}= | Convert To String | some_request_url         |                            |
+        | @{args}=        | Create List       | https://url/to/visit.com |                            |
+        | &{kwargs}=      | Create Dictionary | wait_until=networkidle   | timeout=${10000}           |
+        | @{action_args}= | Create List       | ${args}                  | ${kwargs}                  |
+        | ${request}=     | Expect Event      | ${page}                  | request                    |
+        | ...             |                   | go to                    | action_args=${action_args} |
+
+        """
+
+        return page.expect_event(
+            page.page, event, action, action_args=action_args, **kwargs
+        )
+
+    @keyword
     def expect_request(
         self,
         page: PlaywbotPage,
         url_or_predicate: Union[str, Pattern, Callable],
         action: str,
         action_args: Union[list[dict[str, Any]], None] = None,
-        **kwargs
+        **kwargs,
     ):
         """Waits for the request and returns the object of the request.
 
@@ -427,7 +470,7 @@ class Playwbot:
         handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         value: str = "",
-        **kwargs
+        **kwargs,
     ):
         """Fills an element.
 
@@ -694,7 +737,7 @@ class Playwbot:
         self,
         handle: ElementHandle,
         state: Literal["visible", "hidden", "enabled", "disabled", "editable"],
-        **kwargs
+        **kwargs,
     ):
         """Waits, until given state is satisfied. If state is not satisfied until given timeout, the
         keyword will throw an error.

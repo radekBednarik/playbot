@@ -24,12 +24,45 @@ class PlaywbotPage(Handle):
         return page.close(run_before_unload=run_before_unload)
 
     @staticmethod
+    def expect_event(
+        page: Page,
+        event: str,
+        action: str,
+        action_args: Union[list[dict[str, Any]], None] = None,
+        **kwargs,
+    ):
+        """Same logic as `expect_request()` method.
+
+        Args:
+            page (Page): browser context's page instance
+            event (str): event to expect, e.g. "request", "load", etc.
+            action (str): action to perform when event is detected, e.g. "go to", etc.
+            action_args (Union[list[dict[str, Any]], None], optional): args for `action`. Defaults to None.
+
+        Returns:
+            [Any]: object representing the event we are waiting/expecting for.
+        """
+        if action_args:
+            args_: list[Any] = []
+            kwargs_: dict[str, Any] = {}
+            for item in action_args:
+                if isinstance(item, list):
+                    args_ = item
+                else:
+                    kwargs_ = item
+
+        with page.expect_event(event, **kwargs) as event_manager:
+            if action == "go to":
+                page.goto(*args_, **kwargs_)
+        return event_manager.value
+
+    @staticmethod
     def expect_request(
         page: Page,
         url_or_predicate: Union[str, Pattern, Callable],
         action: str,
         action_args: Union[list[dict[str, Any]], None] = None,
-        **kwargs
+        **kwargs,
     ):
         """This one is a bit tricky.
         Robot Framework does not allow to pass Keywords (which are essentially
