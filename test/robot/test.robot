@@ -75,13 +75,13 @@ Is Hidden
     ${context}=               New Context                viewport=&{VP_1920_1080}
     ${page}=                  New Page                   ${context}
     Go To                     ${page}                    https://www.tesena.com/en
-    ${element}=               Query Selector             ${page}    xpath=//button[contains(@class, "btn-confirm")]
-    ${banner}=                Query Selector             ${page}    xpath=//div[@id="panel-cookies"]
+    ${element}=               Query Selector             ${page}    //button[contains(@class, "btn-confirm")]
+    ${banner}=                Query Selector             ${page}    //div[@id="panel-cookies"]
     Click                     ${element}
     Wait For Element State    ${banner}                  hidden
     ${is_hidden_via_el}=      Is Hidden                  ${banner}
     Should Be True            ${is_hidden_via_el}==True
-    ${is_hidden_via_page}=    Is Hidden                  ${page}    xpath=//div[@id="panel-cookies"]
+    ${is_hidden_via_page}=    Is Hidden                  ${page}    //div[@id="panel-cookies"]
     Should Be True            ${is_hidden_via_page}==True
     Close Context             ${context}
 
