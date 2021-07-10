@@ -552,7 +552,7 @@ class Playwbot:
     @keyword
     def is_visible(
         self,
-        handle: Union[PlaywbotPage, ElementHandle],
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         timeout: Union[float, None] = None,
     ):
@@ -585,9 +585,10 @@ class Playwbot:
         | ${status}=     | Is Visible        | ${element}           |             |
         | Should Be True | ${status}==True   |                      |             |
         """
-        if isinstance(handle, PlaywbotPage):
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.is_visible(selector=selector, timeout=timeout)
-        return handle.is_visible()
+        if isinstance(handle, ElementHandle):
+            return handle.is_visible()
 
     @keyword
     def query_selector(self, handle: Union[PlaywbotPage, ElementHandle], selector: str):

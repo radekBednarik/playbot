@@ -39,7 +39,7 @@ class Handle:
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):
-        if isinstance(self.handle, Page) and selector is not None:
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
             return self.handle.is_visible(selector, timeout=timeout)
 
         if (
