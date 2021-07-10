@@ -550,9 +550,51 @@ class Playwbot:
         return page.go_to(page.page, url, **kwargs)
 
     @keyword
+    def is_hidden(
+        self,
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
+        selector: Union[str, None] = None,
+        timeout: Union[float, None] = None,
+    ):
+        """Predicate. Verifies, whether element is hidden.
+
+        See https://playwright.dev/python/docs/api/class-page#page-is-hidden for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-is-hidden for
+        element variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-is-hidden for
+        frame variant documentation.
+
+        == Example ==
+
+        === Is Hidden with page and selector ===
+
+        | =A=            | =B=               | =C=                  | =D=         | =E=          |
+        | ${page}=       | New Page          | ${context}           |             |              |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |              |
+        | ${status}=     | Is Hidden         | ${page}              | ${selector} | timeout=5000 |
+        | Should Be True | ${status}==True   |                      |             |              |
+
+        === Is Hidden with element ===
+
+        | =A=            | =B=               | =C=                  | =D=         |
+        | ${page}=       | New Page          | ${context}           |             |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |
+        | ${element}=    | Query Selector    | ${page}              | ${selector} |
+        | ${status}=     | Is Hidden         | ${element}           |             |
+        | Should Be True | ${status}==True   |                      |             |
+        """
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
+            return handle.is_hidden(selector=selector, timeout=timeout)
+        if isinstance(handle, ElementHandle):
+            return handle.is_hidden()
+
+    @keyword
     def is_visible(
         self,
-        handle: Union[PlaywbotPage, ElementHandle],
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
         selector: Union[str, None] = None,
         timeout: Union[float, None] = None,
     ):
@@ -585,9 +627,10 @@ class Playwbot:
         | ${status}=     | Is Visible        | ${element}           |             |
         | Should Be True | ${status}==True   |                      |             |
         """
-        if isinstance(handle, PlaywbotPage):
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.is_visible(selector=selector, timeout=timeout)
-        return handle.is_visible()
+        if isinstance(handle, ElementHandle):
+            return handle.is_visible()
 
     @keyword
     def query_selector(self, handle: Union[PlaywbotPage, ElementHandle], selector: str):
