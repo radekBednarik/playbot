@@ -4,7 +4,7 @@ Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 Library           String
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -67,6 +67,20 @@ Get cookies
     @{urls}=                  Create List             https://www.tesena.com    https://www.youtube.com
     @{array_cookies}=         Cookies                ${context}    ${urls}
     Log                       ${array_cookies}
+    Close Context             ${context}
+
+Is Enabled
+    [Documentation]    get it running
+    [Tags]             is_enabled
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    Go To                     ${page}                https://www.tesena.com/en/career    wait_until=domcontentloaded
+    ${element_via_page}=      Is Enabled             ${page}                             //input[@type="submit"]
+    ...                                              timeout=${5000}
+    Should Be True           ${element_via_page}==True
+    ${element_via_query}=     Query Selector         ${page}                             //input[@type="submit"]
+    ${is_enabled}=            Is Enabled             ${element_via_query}
+    Should Be True            ${is_enabled}==True
     Close Context             ${context}
 
 Is Hidden
