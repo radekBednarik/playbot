@@ -550,6 +550,90 @@ class Playwbot:
         return page.go_to(page.page, url, **kwargs)
 
     @keyword
+    def is_editable(
+        self,
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
+        selector: Union[str, None] = None,
+        timeout: Union[float, None] = None,
+    ):
+        """Predicate. Verifies, whether element is enabled.
+
+        See https://playwright.dev/python/docs/api/class-page#page-is-enabled for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-is-enabled for
+        frame variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-is-enabled for
+        element variant documentation.
+
+        == Example ==
+
+        === Is Editable with page and selector ===
+
+        | =A=            | =B=               | =C=                  | =D=         | =E=          |
+        | ${page}=       | New Page          | ${context}           |             |              |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |              |
+        | ${status}=     | Is Editable       | ${page}              | ${selector} | timeout=5000 |
+        | Should Be True | ${status}==True   |                      |             |              |
+
+        === Is Editable with element ===
+
+        | =A=            | =B=               | =C=                  | =D=         |
+        | ${page}=       | New Page          | ${context}           |             |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |
+        | ${element}=    | Query Selector    | ${page}              | ${selector} |
+        | ${status}=     | Is Editable       | ${element}           |             |
+        | Should Be True | ${status}==True   |                      |             |
+        """
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
+            return handle.is_editable(selector=selector, timeout=timeout)
+        if isinstance(handle, ElementHandle):
+            return handle.is_editable()
+
+    @keyword
+    def is_enabled(
+        self,
+        handle: Union[PlaywbotPage, ElementHandle, Frame],
+        selector: Union[str, None] = None,
+        timeout: Union[float, None] = None,
+    ):
+        """Predicate. Verifies, whether element is enabled.
+
+        See https://playwright.dev/python/docs/api/class-page#page-is-enabled for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-is-enabled for
+        frame variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-is-enabled for
+        element variant documentation.
+
+        == Example ==
+
+        === Is Enabled with page and selector ===
+
+        | =A=            | =B=               | =C=                  | =D=         | =E=          |
+        | ${page}=       | New Page          | ${context}           |             |              |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |              |
+        | ${status}=     | Is Enabled        | ${page}              | ${selector} | timeout=5000 |
+        | Should Be True | ${status}==True   |                      |             |              |
+
+        === Is Hidden with element ===
+
+        | =A=            | =B=               | =C=                  | =D=         |
+        | ${page}=       | New Page          | ${context}           |             |
+        | ${selector}=   | Convert To String | xpath=/some-selector |             |
+        | ${element}=    | Query Selector    | ${page}              | ${selector} |
+        | ${status}=     | Is Enabled        | ${element}           |             |
+        | Should Be True | ${status}==True   |                      |             |
+        """
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
+            return handle.is_enabled(selector=selector, timeout=timeout)
+        if isinstance(handle, ElementHandle):
+            return handle.is_enabled()
+
+    @keyword
     def is_hidden(
         self,
         handle: Union[PlaywbotPage, ElementHandle, Frame],
