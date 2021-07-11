@@ -69,6 +69,20 @@ Get cookies
     Log                       ${array_cookies}
     Close Context             ${context}
 
+Is Editable
+    [Documentation]    get it running
+    [Tags]             is_editable
+    ${context}=               New Context            viewport=&{VP_1920_1080}
+    ${page}=                  New Page               ${context}
+    Go To                     ${page}                https://www.tesena.com/en/career    wait_until=domcontentloaded
+    ${is_editable_p}=         Is Editable            ${page}                             //input[@name="First Name"]
+    ...                                              timeout=${5000}
+    Should Be True            ${is_editable_p}==True
+    ${element}=               Query Selector         ${page}                             //input[@name="First Name"]
+    ${is_editable_e}=         Is Editable            ${element}                          
+    Should Be True            ${is_editable_e}==True
+    Close Context             ${context}
+
 Is Enabled
     [Documentation]    get it running
     [Tags]             is_enabled

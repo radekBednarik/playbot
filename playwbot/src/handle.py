@@ -36,6 +36,19 @@ class Handle:
 
         return self.handle.fill(value, **kwargs)
 
+    def is_editable(
+        self, selector: Union[str, None] = None, timeout: Union[float, None] = None
+    ):
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.is_editable(selector, timeout=timeout)
+
+        if (
+            isinstance(self.handle, ElementHandle)
+            and selector is None
+            and timeout is None
+        ):
+            return self.handle.is_editable()
+
     def is_hidden(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):
