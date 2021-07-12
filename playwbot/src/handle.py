@@ -1,9 +1,10 @@
 """Implements methods shared by Page, or Frame and ElementHandle classes.
 """
 
-
+from pathlib import Path
 from typing import Any, Literal, Union
-from playwright.sync_api import Page, ElementHandle, Frame
+
+from playwright.sync_api import ElementHandle, FilePayload, Frame, Page
 
 
 class Handle:
@@ -94,6 +95,32 @@ class Handle:
     def query_selector_all(self, selector: str):
         return self.handle.query_selector_all(selector)
 
+    def set_input_files(
+        self,
+        selector: Union[str, None],
+        files: Union[
+            str,
+            Path,
+            FilePayload,
+            list[Union[str, Path]],
+            list[FilePayload],
+        ],
+        **kwargs,
+    ):
+        if (
+            isinstance(self.handle, (Page, Frame))
+            and selector is not None
+            and files is not None
+        ):
+            return self.handle.set_input_files(selector, files, **kwargs)
+
+        if (
+            isinstance(self.handle, ElementHandle)
+            and selector is None
+            and files is not None
+        ):
+            return self.handle.set_input_files(files, **kwargs)
+
     def screenshot(self, **kwargs):
         return self.handle.screenshot(**kwargs)
 
@@ -104,7 +131,7 @@ class Handle:
     def wait_for_element_state(
         self,
         state: Literal["visible", "hidden", "enabled", "disabled", "editable"],
-        **kwargs
+        **kwargs,
     ):
         if isinstance(self.handle, ElementHandle):
             return self.handle.wait_for_element_state(state, **kwargs)

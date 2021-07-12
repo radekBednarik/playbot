@@ -4,9 +4,10 @@
 by playwright/python library to the robotframework.
 """
 
+from pathlib import Path
 from typing import Any, Callable, Literal, Pattern, Union
 
-from playwright.sync_api import Browser, ElementHandle, Frame
+from playwright.sync_api import Browser, ElementHandle, FilePayload, Frame
 from robot.api.deco import keyword, library
 
 from playwbot.src.browser import PlaywbotBrowser
@@ -798,6 +799,54 @@ class Playwbot:
         | Reload | ${page} | wait_until=domcontentloaded | timeout=${10000} |
         """
         return page.reload(page.page, **kwargs)
+
+    @keyword
+    def set_input_files(
+        self,
+        page: Union[PlaywbotPage, ElementHandle, Frame],
+        files: Union[
+            str,
+            Path,
+            FilePayload,
+            list[Union[str, Path]],
+            list[FilePayload],
+        ],
+        selector: Union[str, None] = None,
+        **kwargs,
+    ):
+        """Searches for the element by provided selector (except the case, when this keyword is called
+        with <ElementHandle>) and sets the value(s) of the provided file(s).
+
+        See https://playwright.dev/python/docs/api/class-page#page-set-input-files for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-set-input-files for
+        frame variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-set-input-files for
+        element variant documentation.
+
+        == Example ==
+
+        === With Page ===
+
+        | =A=             | =B=         | =C=                | =D=                     |
+        | ${page}=        | New Page    | ${context}         |                         |
+        | Set Input Files | ${page}     | path/to/file1.txt  | //input-button-selector |
+        | @{file_paths}=  | Create List | path/one/file1.png | path/two/file2.pdf      |
+        | Set Input Files | ${page}     | ${file_paths}      | //input-button-selector |
+
+        === With Element ===
+
+        | =A=               | =B=              | =C=                | =D=                      |
+        | ${input_element}= | Query Selector   | ${page}            | //input-element-selector |
+        | Set Input Files   | ${input_element} | path/to/file1.txt  |                          |
+        """
+        if isinstance(page, (PlaywbotPage, Frame)) and selector is not None:
+            return page.set_input_files(selector, files, **kwargs)
+
+        if isinstance(page, ElementHandle) and selector is None:
+            return page.set_input_files(files, **kwargs)
 
     @keyword
     def screenshot(self, handle: Union[PlaywbotPage, ElementHandle], **kwargs):
