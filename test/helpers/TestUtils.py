@@ -4,6 +4,7 @@
 from typing import Any, Literal
 from robot.api.deco import library, keyword
 from playwright.sync_api import Request
+from playwbot.src.page import PlaywbotPage
 
 
 @library(scope="GLOBAL")
@@ -18,7 +19,17 @@ class TestUtils:
         self,
         obj: Any,
         type_: Literal[
-            "str", "int", "float", "list", "dict", "tuple", "set", "frozenset", "None"
+            "str",
+            "int",
+            "float",
+            "list",
+            "dict",
+            "tuple",
+            "set",
+            "frozenset",
+            "None",
+            "request",
+            "playwbotPage",
         ],
     ):
         """Checks, if `obj` is of given `type`.
@@ -53,5 +64,7 @@ class TestUtils:
             return isinstance(obj, frozenset)
         if type_ == "request":
             return isinstance(obj, Request)
+        if type_ == "playwbotPage":
+            return isinstance(obj, PlaywbotPage)
 
         raise Exception("Invalid type")
