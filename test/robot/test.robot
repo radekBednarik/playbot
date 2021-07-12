@@ -4,7 +4,7 @@ Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 Library           String
 
-Suite Setup       Start Browser   headless=${TRUE}
+Suite Setup       Start Browser   headless=${FALSE}
 Suite Teardown    Close Browser
 
 ***Variables***
@@ -353,4 +353,20 @@ Expect Event
     ...                                              timeout=${5000}
     ${check}=                Is Type                 ${request}    request
     Should Be True           ${check}==True
+    Close Context            ${context}
+
+Set Input Files
+    [Documentation]    get it running
+    [Tags]             set_input_files
+    ${context}=              New Context                           viewport=&{VP_1920_1080}
+    ${page}=                 New Page                              ${context}
+    ${path1}=                Convert To String                     test/test_data/SetInputFiles_dummy.csv
+    @{paths}=                Create List                           ${path1}
+    ${selector}=             Convert To String                     //input[@id="fileUpload"]
+    ${url}=                  Convert To String                     http://automationpractice.com/index.php?controller=contact
+    Go To                    ${page}                               ${url}
+    Set Input Files          ${page}                               ${path1}                   ${selector}
+    Reload                   ${page}                               wait_until=domcontentloaded
+    ${button}=               Wait For Selector                     ${page}                    ${selector}
+    Set Input Files          ${button}                             ${paths}
     Close Context            ${context}
