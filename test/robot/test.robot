@@ -370,3 +370,19 @@ Set Input Files
     ${button}=               Wait For Selector                     ${page}                    ${selector}
     Set Input Files          ${button}                             ${paths}
     Close Context            ${context}
+
+Expect Page
+    [Documentation]    get it running
+    [Tags]             expect_page
+    ${context}=              New Context                           viewport=&{VP_1920_1080}
+    ${page}=                 New Page                              ${context}
+    ${url}=                  Convert To String                     https://www.tesena.com/en
+    @{args}=                 Create List                           //a[contains(@title, "Youtube")]
+    @{action_args}=          Create List                           ${args}
+    Go To                    ${page}                               ${url}                     wait_until=networkidle
+    ${new_page}=             Expect Page                           ${context}                 ${page}
+    ...                                                            click                      action_args=${action_args}
+    ...                                                            timeout=${10000}
+    ${check}=                Is Type                               ${new_page}                playwbotPage
+    Should Be True           ${check}==True
+    Close Context            ${context}

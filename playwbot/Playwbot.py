@@ -170,6 +170,44 @@ class Playwbot:
         return context.cookies(context.context, urls)
 
     @keyword
+    def expect_page(
+        self,
+        context: PlaywbotContext,
+        current_page: PlaywbotPage,
+        action: str,
+        action_args: list[Union[list[Any], dict[str, Any]]] = None,
+        **kwargs,
+    ):
+        """Do the specified `action` and waits for the new <PlaywbotPage> to be created. This object
+        is returned and can be assigned to the variable and used in the future.
+
+        See https://playwright.dev/python/docs/api/class-browsercontext#browser-context-wait-for-page for
+        the documentation.
+
+        == Example ==
+        | ==A==           | ==B==             | ==C==                            | ==D==                      |
+        | ${context}=     | New Context       | viewport=&{VP_1920_1080}         |                            |
+        | ${page}=        | New Page          | ${context}                       |                            |
+        | ${url}=         | Convert To String | https://www.tesena.com/en        |                            |
+        | @{args}=        | Create List       | //a[contains(@title, "Youtube")] |                            |
+        | @{action_args}= | Create List       | ${args}                          |                            |
+        | Go To           | ${page}           | ${url}                           | wait_until=networkidle     |
+        | ${new_page}=    | Expect Page       | ${context}                       | ${page}                    |
+        | ...             |                   | click                            | action_args=${action_args} |
+        | ...             |                   | timeout=${10000}                 |                            |
+        | ${check}=       | Is Type           | ${new_page}                      | playwbotPage               |
+        | Should Be True  | ${check}==True    |                                  |                            |
+        | Close Context   | ${context}        |                                  |                            |
+        """
+        return context.expect_page(
+            context.context,
+            current_page.page,
+            action,
+            action_args=action_args,
+            **kwargs,
+        )
+
+    @keyword
     def new_page(self, context: PlaywbotContext, **kwargs):
         """Opens new page and returns its instance.
         It is represented by wrapper class *PlaywbotPage*, which
