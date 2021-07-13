@@ -1,7 +1,7 @@
 """Implements Playwright's browser's Context.
 """
 
-from typing import Any, Union
+from typing import Any, Literal, Union
 
 from playwright.sync_api import Browser, BrowserContext, Page
 from playwbot.src.page import PlaywbotPage
@@ -27,9 +27,9 @@ class PlaywbotContext:
     def expect_page(
         context: BrowserContext,
         current_page: Page,
-        action: str,
+        action: Literal["click"],
         action_args: list[Union[list[Any], dict[str, Any]]] = None,
-        **kwargs
+        **kwargs,
     ):
         """Performs supported `action` and returns new page represented by <PlaywbotPage> object.
 
@@ -58,6 +58,8 @@ class PlaywbotContext:
         with context.expect_page(**kwargs) as new_page_manager:
             if action == "click":
                 current_page.click(*args_, **kwargs_)
+            else:
+                raise ValueError(f"{action} is not supported action")
 
         new_page: Page = new_page_manager.value
         new_playwbot_page: PlaywbotPage = PlaywbotPage(context)

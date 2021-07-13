@@ -24,9 +24,13 @@ class Handle:
         if isinstance(self.handle, ElementHandle) and selector is None:
             return self.handle.click(**kwargs)
 
+        raise TypeError(f"{self.handle.__repr__()} is not of supported type.")
+
     def content_frame(self):
         if isinstance(self.handle, ElementHandle):
             return self.handle.content_frame()
+
+        raise TypeError(f"{self.handle.__repr__()} is not of supported type.")
 
     def evaluate(self, expression: str, arg: Union[Any, None] = None):
         return self.handle.evaluate(expression, arg)
@@ -50,6 +54,11 @@ class Handle:
         ):
             return self.handle.is_editable()
 
+        raise RuntimeError(
+            "Please check, if you provided correct type for handle arg \
+            and if some kwargs are not provided by mistake."
+        )
+
     def is_hidden(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):
@@ -62,6 +71,11 @@ class Handle:
             and timeout is None
         ):
             return self.handle.is_hidden()
+
+        raise RuntimeError(
+            "Please check, if you provided correct type for handle arg \
+            and if some kwargs are not provided by mistake."
+        )
 
     def is_enabled(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
@@ -76,6 +90,11 @@ class Handle:
         ):
             return self.handle.is_enabled()
 
+        raise RuntimeError(
+            "Please check, if you provided correct type for handle arg \
+            and if some kwargs are not provided by mistake."
+        )
+
     def is_visible(
         self, selector: Union[str, None] = None, timeout: Union[float, None] = None
     ):
@@ -88,6 +107,11 @@ class Handle:
             and timeout is None
         ):
             return self.handle.is_visible()
+
+        raise RuntimeError(
+            "Please check, if you provided correct type for handle arg \
+            and if some kwargs are not provided by mistake."
+        )
 
     def query_selector(self, selector: str):
         return self.handle.query_selector(selector)
@@ -121,6 +145,11 @@ class Handle:
         ):
             return self.handle.set_input_files(files, **kwargs)
 
+        raise RuntimeError(
+            "Please check, if you provided correct type for handle arg \
+            and if some kwargs are not provided by mistake."
+        )
+
     def screenshot(self, **kwargs):
         return self.handle.screenshot(**kwargs)
 
@@ -135,6 +164,8 @@ class Handle:
     ):
         if isinstance(self.handle, ElementHandle):
             return self.handle.wait_for_element_state(state, **kwargs)
+
+        raise TypeError(f"{self.handle.__repr__()} is not of supported type.")
 
     def wait_for_selector(self, selector: str, **kwargs):
         return self.handle.wait_for_selector(selector, **kwargs)

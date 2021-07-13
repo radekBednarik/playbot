@@ -27,8 +27,8 @@ class PlaywbotPage(Handle):
     def expect_event(
         page: Page,
         event: str,
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Union[list[dict[str, Any]], list[Any]] = None,
         **kwargs,
     ):
         """Same logic as `expect_request()` method.
@@ -54,14 +54,16 @@ class PlaywbotPage(Handle):
         with page.expect_event(event, **kwargs) as event_manager:
             if action == "go to":
                 page.goto(*args_, **kwargs_)
+            else:
+                raise ValueError(f"{action} is not supported action.")
         return event_manager.value
 
     @staticmethod
     def expect_request(
         page: Page,
         url_or_predicate: Union[str, Pattern, Callable],
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Union[list[dict[str, Any]], list[Any]] = None,
         **kwargs,
     ):
         """This one is a bit tricky.
@@ -100,6 +102,8 @@ class PlaywbotPage(Handle):
         with page.expect_request(url_or_predicate, **kwargs) as request_manager:
             if action == "go to":
                 page.goto(*args_, **kwargs_)
+            else:
+                raise ValueError(f"{action} is not supported action.")
         return request_manager.value
 
     @staticmethod
