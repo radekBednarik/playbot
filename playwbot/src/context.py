@@ -5,6 +5,7 @@ from typing import Any, Literal, Union
 
 from playwright.sync_api import Browser, BrowserContext, Page
 from playwbot.src.page import PlaywbotPage
+from playwbot.src.utils import give_action_args
 
 
 class PlaywbotContext:
@@ -45,15 +46,10 @@ class PlaywbotContext:
         Returns:
             [PlaywbotPage]: instance of the new <PlaywbotPage> object.
         """
+        args_: list[Any]
+        kwargs_: dict[str, Any]
 
-        if action_args:
-            args_: list[Any] = []
-            kwargs_: dict[str, Any] = {}
-            for arg in action_args:
-                if isinstance(arg, list):
-                    args_ = arg
-                else:
-                    kwargs_ = arg
+        (args_, kwargs_) = give_action_args(action_args)
 
         with context.expect_page(**kwargs) as new_page_manager:
             if action == "click":
