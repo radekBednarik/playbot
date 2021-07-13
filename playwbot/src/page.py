@@ -1,9 +1,11 @@
 """Implements Playwright's Page.
 """
 
-from typing import Any, Callable, Literal, Pattern, Union
-from playwright.sync_api import BrowserContext, Page
+from typing import Any, Callable, Literal, Optional, Pattern, Union
+
 from playwbot.src.handle import Handle
+from playwbot.src.utils import give_action_args
+from playwright.sync_api import BrowserContext, Page
 
 
 class PlaywbotPage(Handle):
@@ -27,8 +29,8 @@ class PlaywbotPage(Handle):
     def expect_event(
         page: Page,
         event: str,
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Optional[list[Union[list[Any], dict[str, Any]]]] = None,
         **kwargs,
     ):
         """Same logic as `expect_request()` method.
@@ -37,31 +39,30 @@ class PlaywbotPage(Handle):
             page (Page): browser context's page instance
             event (str): event to expect, e.g. "request", "load", etc.
             action (str): action to perform when event is detected, e.g. "go to", etc.
-            action_args (Union[list[dict[str, Any]], None], optional): args for `action`. Defaults to None.
+            action_args (Optional[list[Union[list[Any], dict[str, Any]]]], optional):
+            args for `action`. Defaults to None.
 
         Returns:
             [Any]: object representing the event we are waiting/expecting for.
         """
-        if action_args:
-            args_: list[Any] = []
-            kwargs_: dict[str, Any] = {}
-            for item in action_args:
-                if isinstance(item, list):
-                    args_ = item
-                else:
-                    kwargs_ = item
+        args_: list[Any]
+        kwargs_: dict[str, Any]
+
+        (args_, kwargs_) = give_action_args(action_args)
 
         with page.expect_event(event, **kwargs) as event_manager:
             if action == "go to":
                 page.goto(*args_, **kwargs_)
+            else:
+                raise ValueError(f"{action} is not supported action.")
         return event_manager.value
 
     @staticmethod
     def expect_request(
         page: Page,
         url_or_predicate: Union[str, Pattern, Callable],
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Optional[list[Union[list[Any], dict[str, Any]]]] = None,
         **kwargs,
     ):
         """This one is a bit tricky.
@@ -83,23 +84,21 @@ class PlaywbotPage(Handle):
             page (Page): context page instance
             url_or_predicate (Union[str, Pattern, Callable]): url or predicate to be checked against
             action (str): action which triggers awaited request
-            action_args (Union[list[dict[str, Any]], None], optional): args for action. Defaults to None.
+            action_args (Optional[list[Union[list[Any], dict[str, Any]]]], optional): args for action. Defaults to None.
 
         Returns:
             [playwright.sync_api.Request]: Request object
         """
-        if action_args:
-            args_: list[Any] = []
-            kwargs_: dict[str, Any] = {}
-            for item in action_args:
-                if isinstance(item, list):
-                    args_ = item
-                else:
-                    kwargs_ = item
+        args_: list[Any]
+        kwargs_: dict[str, Any]
+
+        (args_, kwargs_) = give_action_args(action_args)
 
         with page.expect_request(url_or_predicate, **kwargs) as request_manager:
             if action == "go to":
                 page.goto(*args_, **kwargs_)
+            else:
+                raise ValueError(f"{action} is not supported action.")
         return request_manager.value
 
     @staticmethod

@@ -4,7 +4,7 @@ Library           ${EXECDIR}${/}test${/}helpers${/}TestUtils.py
 Library           OperatingSystem
 Library           String
 
-Suite Setup       Start Browser   headless=${FALSE}
+Suite Setup       Start Browser   headless=${TRUE}
 Suite Teardown    Close Browser
 
 ***Variables***

@@ -1,4 +1,4 @@
-# pylint: disable=invalid-name, line-too-long, no-self-use
+# pylint: disable=invalid-name, line-too-long, no-self-use, too-many-lines
 
 """Playbot provides operations/keywords
 by playwright/python library to the robotframework.
@@ -420,8 +420,8 @@ class Playwbot:
         self,
         page: PlaywbotPage,
         event: str,
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Union[list[dict[str, Any]], list[Any]] = None,
         **kwargs,
     ):
         """Waits for given `event` to fire. Returns object representing the event.
@@ -463,8 +463,8 @@ class Playwbot:
         self,
         page: PlaywbotPage,
         url_or_predicate: Union[str, Pattern, Callable],
-        action: str,
-        action_args: Union[list[dict[str, Any]], None] = None,
+        action: Literal["go to"],
+        action_args: Union[list[dict[str, Any]], list[Any]] = None,
         **kwargs,
     ):
         """Waits for the request and returns the object of the request.
