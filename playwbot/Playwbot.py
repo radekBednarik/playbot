@@ -5,7 +5,7 @@ by playwright/python library to the robotframework.
 """
 
 from pathlib import Path
-from typing import Any, Callable, Literal, Pattern, Union
+from typing import Any, Callable, Literal, Optional, Pattern, Union
 
 from playwright.sync_api import Browser, ElementHandle, FilePayload, Frame
 from robot.api.deco import keyword, library
@@ -174,8 +174,8 @@ class Playwbot:
         self,
         context: PlaywbotContext,
         current_page: PlaywbotPage,
-        action: str,
-        action_args: list[Union[list[Any], dict[str, Any]]] = None,
+        action: Literal["click"],
+        action_args: Optional[list[Union[list[Any], dict[str, Any]]]] = None,
         **kwargs,
     ):
         """Do the specified `action` and waits for the new <PlaywbotPage> to be created. This object
@@ -305,13 +305,53 @@ class Playwbot:
         === Check element by ElementHandle ===
 
         | =A=         | =B=           | =C=     | =D=       |
-        | ${element}= | ElementHandle | ${page} | #id=my-id |
+        | ${element}= | Query Element | ${page} | #id=my-id |
         | Check       | ${element}    |         |           |
         """
         if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
             return handle.check(selector, **kwargs)
-
         return handle.check(**kwargs)
+
+    @keyword
+    def uncheck(
+        self,
+        handle: Union[PlaywbotPage, Frame, ElementHandle],
+        selector: Union[str, None] = None,
+        **kwargs,
+    ):
+        """Unchecks the element.
+
+        See https://playwright.dev/python/docs/api/class-page#page-uncheck for
+        page variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-frame/#frame-uncheck for
+        frame variant documentation.
+
+        See https://playwright.dev/python/docs/api/class-elementhandle/#element-handle-uncheck for
+        element variant documentation.
+
+        == Example ==
+
+        === Uncheck element by Page and selector ===
+
+        | =A=         | =B=         | =C=       |
+        | Uncheck     | ${page}     | #id=my-id |
+
+        === Uncheck element by Frame and selector ===
+
+        | =A=         | =B=         | =C=       | =D=           |
+        | ${frame}=   | Frame       | ${page}   | name=my-frame |
+        | Uncheck     | ${frame}    | #id=my-id |               |
+
+        === Uncheck element by ElementHandle ===
+
+        | =A=         | =B=           | =C=     | =D=       |
+        | ${element}= | Query Element | ${page} | #id=my-id |
+        | Uncheck     | ${element}    |         |           |
+        """
+        if isinstance(handle, (PlaywbotPage, Frame)) and selector is not None:
+            return handle.uncheck(selector, **kwargs)
+        return handle.uncheck(**kwargs)
 
     @keyword
     def click(
@@ -421,7 +461,7 @@ class Playwbot:
         page: PlaywbotPage,
         event: str,
         action: Literal["go to"],
-        action_args: Union[list[dict[str, Any]], list[Any]] = None,
+        action_args: Optional[list[Union[list[Any], dict[str, Any]]]] = None,
         **kwargs,
     ):
         """Waits for given `event` to fire. Returns object representing the event.
@@ -464,7 +504,7 @@ class Playwbot:
         page: PlaywbotPage,
         url_or_predicate: Union[str, Pattern, Callable],
         action: Literal["go to"],
-        action_args: Union[list[dict[str, Any]], list[Any]] = None,
+        action_args: Optional[list[Union[list[Any], dict[str, Any]]]] = None,
         **kwargs,
     ):
         """Waits for the request and returns the object of the request.

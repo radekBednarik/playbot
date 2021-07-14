@@ -236,6 +236,27 @@ Check
     Should Be True           ${type_check2}==True
     Close Context            ${context}
 
+Uncheck
+    [Documentation]    get it running
+    [Tags]             uncheck
+    ${context}=              New Context             viewport=&{VP_1920_1080}
+    ${page}=                 New Page                ${context}
+    Go To                    ${page}                 https://www.tesena.com/en/career     wait_until=networkidle
+    ${checkbox_sel}=         Convert To String       //input[@type="checkbox" and contains(@aria-label, "consent")]
+    # Page and selector
+    Check                    ${page}                 ${checkbox_sel}
+    ${ret_chec_1}=           Uncheck                 ${page}                 ${checkbox_sel}
+    ${type_check}=           Is Type                 ${ret_chec_1}           None
+    Should Be True           ${type_check}==True
+    # element
+    ${checkbox}=             Query Selector          ${page}    ${checkbox_sel}
+    Check                    ${checkbox}
+    ${ret_chec_2}=           Uncheck                 ${checkbox}
+    ${type_check2}=          Is Type                 ${ret_chec_2}           None
+    Should Be True           ${type_check2}==True
+    Close Context            ${context}
+
+
 Fill
     [Documentation]    get it running
     [Tags]             fill

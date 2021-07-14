@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "playwbot"
-version = "0.2.0"
+version = "0.2.1"
 description = "RobotFramework wrapper of Playwright-Python"
 authors = ["radekBednarik <radek.bednarik@tesena.com>"]
 license = "MIT"
