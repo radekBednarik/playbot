@@ -14,8 +14,12 @@ class Handle:
     def check(self, selector: Union[str, None] = None, **kwargs):
         if isinstance(self.handle, (Page, Frame)) and selector is not None:
             return self.handle.check(selector, **kwargs)
-
         return self.handle.check(**kwargs)
+
+    def uncheck(self, selector: Union[str, None] = None, **kwargs):
+        if isinstance(self.handle, (Page, Frame)) and selector is not None:
+            return self.handle.uncheck(selector, **kwargs)
+        return self.handle.uncheck(**kwargs)
 
     def click(self, selector: Union[str, None] = None, **kwargs):
         if isinstance(self.handle, (Page, Frame)) and selector is not None:
