@@ -2,9 +2,11 @@
 """
 
 from typing import Any, Literal
-from robot.api.deco import library, keyword
-from playwright.sync_api import Request
+
+from playwbot.src.context import PlaywbotContext
 from playwbot.src.page import PlaywbotPage
+from playwright.sync_api import Request
+from robot.api.deco import keyword, library
 
 
 @library(scope="GLOBAL")
@@ -30,6 +32,7 @@ class TestUtils:
             "None",
             "request",
             "playwbotPage",
+            "playwbotContext",
         ],
     ):
         """Checks, if `obj` is of given `type`.
@@ -66,5 +69,7 @@ class TestUtils:
             return isinstance(obj, Request)
         if type_ == "playwbotPage":
             return isinstance(obj, PlaywbotPage)
+        if type_ == "playwbotContext":
+            return isinstance(obj, PlaywbotContext)
 
         raise Exception("Invalid type")
