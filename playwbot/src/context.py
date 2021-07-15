@@ -9,12 +9,18 @@ from playwbot.src.utils import give_action_args
 
 
 class PlaywbotContext:
-    def __init__(self, browser_type_instance: Browser, **kwargs):
+    def __init__(self, browser_type_instance: Union[Browser, BrowserContext], **kwargs):
         self._browser_type_instance = browser_type_instance
         self.context = self._start_context(**kwargs)
 
     def _start_context(self, **kwargs):
-        return self._browser_type_instance.new_context(**kwargs)
+        if isinstance(self._browser_type_instance, Browser):
+            return self._browser_type_instance.new_context(**kwargs)
+        if isinstance(self._browser_type_instance, BrowserContext):
+            return self._browser_type_instance
+        raise TypeError(
+            "Broser type instance argument can be of type <Browser> or <BrowserContext> only."
+        )
 
     @staticmethod
     def close_context(context: BrowserContext):

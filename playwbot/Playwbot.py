@@ -68,6 +68,35 @@ class Playwbot:
         | ***Settings*** |               |                   |
         | Suite Setup    | Start Browser |                   |
         | Suite Setup    | Start Browser | headless=${False} |
+
+        In most cases, user is expected to use standard browser contexts, that are isolated and
+        icognito like. These context can be created by keyword New Context and closed by Close Context.
+
+        However, in case, that user will need to store the browser state information, like cache, or cookies across tests,
+        there is possibility to start the browser with *persistent context*.
+
+        See https://playwright.dev/python/docs/api/class-browsertype#browser-type-launch-persistent-context for
+        documentation.
+
+        In that case, user will simply provide two additional `kwargs` to the Start Browser` keyword and that will start
+        the browser with persistent context. In this situation, only one context can be created per browser instance,
+        context is *not* to be manually closed by Close Context keyword. Use Close Browser keyword, which will shutdown
+        the persistent context as well.
+
+        Also, in this case, user will provide all available options for persistant context as `kwargs` for Start Browser keyword,
+        not when using New Context keyword, since they would be not applied.
+
+        User should take note, that stored information about browser/context are not automatically deleted from
+        given folder, but have to be removed manually, if needed.
+
+        == Example ==
+
+        | =A=            | =B=           | =C=                | =D=                                  | =E=          |
+        | Suite Setup    | Start Browser | persistent=${True} | user_data_dir=path/to/the/custom/dir | viewport=... |
+        | Suite Teardown | Close Browser |                    |                                      |              |
+        ...
+        | ${context}=    | New Context   |                    |                                      |              |
+        | ${page}=       | New Page      | ${context}         |                                      |              |
         """
         self._playbot_browser = PlaywbotBrowser(self._selected_browser, **kwargs)
 
