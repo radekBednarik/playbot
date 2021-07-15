@@ -87,7 +87,7 @@ class Playwbot:
         not when using New Context keyword, since they would be not applied.
 
         User should take note, that stored information about browser/context are not automatically deleted from
-        given folder, but have to be removed manually, if needed.
+        given folder, but have to be removed explicitly, if needed.
 
         == Example ==
 
