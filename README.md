@@ -15,6 +15,19 @@
 - if using poetry, run `poetry add playwbot` and then `poetry install`
 - if using pip, run `pip install playwbot`
 
+### Download the playwright browser binaries
+
+This project is using [poetry](https://python-poetry.org/) as package management tool. One drawback of that is,
+that is does not support post-install scripts.
+
+Therefore, once you install the library, do not forget to execute the command:
+
+```
+python -m playwright install
+```
+
+This will download binaries of all supported browsers.
+
 ## Importing module into the RF suite
 
 - if you have the file directly accesible, just point directly to the location, like this
