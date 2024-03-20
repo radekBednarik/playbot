@@ -33,7 +33,7 @@ robotframework = "^4.0.3"
 playwright = "^1.12.1"
 
 [tool.poetry.dev-dependencies]
-black = "^21.6b0"
+black = "^24.3"
 pylint = "^2.8.3"
 mypy = "^0.902"
 isort = "^5.9.1"
